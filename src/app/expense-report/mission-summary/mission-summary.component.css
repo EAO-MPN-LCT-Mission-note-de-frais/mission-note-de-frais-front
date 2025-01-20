@@ -1,0 +1,10 @@
+.mission-summary {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.mission-summary h2 {
+  margin-top: 0;
+}

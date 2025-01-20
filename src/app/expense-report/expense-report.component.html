@@ -1,0 +1,10 @@
+<div class="expense-report-container">
+  <h1>Note de frais</h1>
+
+  <!-- Affichage des informations de la mission -->
+  <app-mission-summary [mission]="mission"></app-mission-summary>
+
+  <!-- Tableau des dépenses -->
+  <app-expense-table [expenses]="mission.expenseReport.expenses"></app-expense-table>
+
+</div>
