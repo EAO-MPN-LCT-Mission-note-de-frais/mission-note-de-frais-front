@@ -1,5 +1,5 @@
 import { ExpenseReport } from './expense-report';
-import { Status } from './Status';
+import { Status } from './status';
 
 export interface Mission {
   /**
