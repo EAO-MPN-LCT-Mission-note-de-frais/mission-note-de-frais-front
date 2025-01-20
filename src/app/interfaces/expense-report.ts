@@ -1,3 +1,5 @@
+import {Expense} from './expense';
+
 export interface ExpenseReport {
   /**
    * The unique identifier for the expense report.
@@ -13,4 +15,12 @@ export interface ExpenseReport {
    * The status of the expense report.
    */
   status: string;
+
+  /**
+   * The list of expenses associated with this expense report.
+   */
+  expenses: Expense[];
+
 }
+
+export interface ExpenseReportPost extends Omit<ExpenseReport, 'id'> {}
