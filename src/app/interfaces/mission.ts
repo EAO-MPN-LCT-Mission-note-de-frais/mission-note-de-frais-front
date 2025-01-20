@@ -42,3 +42,5 @@ export interface Mission {
    */
   expenseReport: ExpenseReport;
 }
+
+export interface MissionPost extends Omit<Mission, 'id'> {}

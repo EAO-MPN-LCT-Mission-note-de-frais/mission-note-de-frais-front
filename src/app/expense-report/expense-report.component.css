@@ -1,0 +1,10 @@
+.expense-report-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.total-section {
+  margin-top: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
