@@ -1,0 +1,28 @@
+<div class="container">
+    <h1>Gestion des Types de Mission</h1>
+    <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
+    <a routerLink="/mission-type/new" class="btn btn-primary mb-3">Ajouter un Type</a>
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Facturable</th>
+          <th>Prime</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let type of missionTypes">
+          <td>{{ type.label }}</td>
+          <td>{{ type.isCharged ? 'Oui' : 'Non' }}</td>
+          <td>{{ type.isBonus ? 'Oui' : 'Non' }}</td>
+          <td>
+            <a [routerLink]="['/mission-type', type.id, 'edit']" class="btn btn-warning btn-sm">Modifier</a>
+            <button class="btn btn-danger btn-sm" (click)="deleteMissionType(type.id)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
