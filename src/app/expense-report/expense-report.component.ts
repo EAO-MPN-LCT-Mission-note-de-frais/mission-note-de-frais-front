@@ -28,7 +28,7 @@ export class ExpenseReportComponent {
       status: Status.VALIDEE,
       expenses: [
         { id: '1', date: '2023-10-01', description: 'Billet de train', type: 'Transport', amount: 150, tax: 20 },
-        { id: '2', date: '2023-10-02', description: 'Hôtel', type: 'Logement', amount: 400, tax: 10 },
+        { id: '2', date: '2023-11-02', description: 'Hôtel', type: 'Logement', amount: 400, tax: 10 },
         { id: '3', date: '2023-10-03', description: undefined, type: 'Restauration', amount: 50, tax: 5 },
       ],
     }
