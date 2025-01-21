@@ -6,8 +6,8 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-mission-type',
-  standalone: true, 
-  imports: [CommonModule, RouterModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule], 
   templateUrl: './mission-type.component.html',
   styleUrls: ['./mission-type.component.scss']
 })
