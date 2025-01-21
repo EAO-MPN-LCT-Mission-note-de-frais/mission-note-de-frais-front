@@ -1,6 +1,6 @@
 <div class="mission-summary">
-  <p><strong>Départ :</strong> {{ mission.startTown }} ({{ mission.startDate }})</p>
-  <p><strong>Arrivée :</strong> {{ mission.endTown }} ({{ mission.endDate }})</p>
-  <p><strong>Status :</strong> {{ mission.status }}</p>
-  <p><strong>Moyen de transport :</strong> {{ mission.transportIds }}</p>
+  <p><strong>Départ :</strong> {{ mission().startTown }} ({{ mission().startDate }})</p>
+  <p><strong>Arrivée :</strong> {{ mission().endTown }} ({{ mission().endDate }})</p>
+  <p><strong>Status :</strong> {{ mission().status }}</p>
+  <p><strong>Moyen de transport :</strong> {{ mission().transportIds }}</p>
 </div>

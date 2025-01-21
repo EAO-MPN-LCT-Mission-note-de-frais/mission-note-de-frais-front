@@ -8,7 +8,7 @@
 
   <!-- Affichage des informations de la mission -->
   <h2>Récapitulatif de la mission</h2>
-  <app-mission-summary [mission]="mission"></app-mission-summary>
+  <app-mission-summary [mission]="mission()"></app-mission-summary>
 
   <!-- Tableau des dépenses -->
   <div class="table-header">
@@ -17,11 +17,11 @@
       <mat-icon>add</mat-icon>
     </button>
   </div>
-  <app-expense-table [expenses]="mission.expenseReport.expenses"></app-expense-table>
+  <app-expense-table [expenses]="mission().expenseReport.expenses"></app-expense-table>
 
   <div class="total-export-submit">
     <div class="total">
-      Total des dépenses : {{ mission.expenseReport.amount ? mission.expenseReport.amount : '-' }}  €
+      Total des dépenses : {{ mission().expenseReport.amount ? mission().expenseReport.amount : '-' }}  €
     </div>
     <div class="actions">
       <button mat-raised-button (click)="export()">Exporter en PDF</button>
