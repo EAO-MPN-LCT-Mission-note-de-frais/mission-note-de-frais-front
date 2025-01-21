@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 @Component({
   selector: 'app-expense-report',
   standalone: true,
-  imports: [CommonModule, MissionSummaryComponent, ExpenseTableComponent],
+  imports: [CommonModule, MissionSummaryComponent, ExpenseTableComponent, MatIcon, MatButton, MatIconButton],
   templateUrl: './expense-report.component.html',
   styleUrl: './expense-report.component.css'
 })
