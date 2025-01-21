@@ -4,6 +4,9 @@ import {MissionSummaryComponent} from './mission-summary/mission-summary.compone
 import {ExpenseTableComponent} from './expense-table/expense-table.component';
 import {Status} from "../interfaces/status";
 import {Mission} from "../interfaces/mission";
+import {MatIcon} from "@angular/material/icon";
+import {MatButton, MatIconButton} from "@angular/material/button";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-expense-report',
@@ -33,5 +36,27 @@ export class ExpenseReportComponent {
       ],
     }
   };
+
+  constructor(private router: Router) {}
+
+  returnHome() {
+    this.router.navigate(['/missions']);
+  }
+
+  openCreateModal() {
+    console.log('openCreateModal');
+  }
+
+  export() {
+    console.log('export');
+  }
+
+  submit() {
+    console.log('submit');
+  }
+
+  delete() {
+    console.log('delete');
+  }
 
 }

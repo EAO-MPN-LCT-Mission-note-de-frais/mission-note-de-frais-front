@@ -1,10 +1,32 @@
 <div class="expense-report-container">
-  <h1>Note de frais</h1>
+  <div class="title-bar">
+    <button mat-icon-button (click)="returnHome()" aria-label="Retour à la page d'accueil">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 style="display: inline-block;">Note de frais</h1>
+  </div>
 
   <!-- Affichage des informations de la mission -->
+  <h2>Récapitulatif de la mission</h2>
   <app-mission-summary [mission]="mission"></app-mission-summary>
 
   <!-- Tableau des dépenses -->
+  <div class="table-header">
+    <h2>Liste des dépenses</h2>
+    <button mat-icon-button (click)="openCreateModal()" aria-label="Ajouter une dépense">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
   <app-expense-table [expenses]="mission.expenseReport.expenses"></app-expense-table>
 
+  <div class="total-export-submit">
+    <div class="total">
+      Total des dépenses : {{ mission.expenseReport.amount ? mission.expenseReport.amount : '-' }}  €
+    </div>
+    <div class="actions">
+      <button mat-raised-button (click)="export()">Exporter en PDF</button>
+      <button mat-raised-button (click)="submit()">Soumettre</button>
+      <button mat-raised-button (click)="delete()">Supprimer</button>
+    </div>
+  </div>
 </div>
