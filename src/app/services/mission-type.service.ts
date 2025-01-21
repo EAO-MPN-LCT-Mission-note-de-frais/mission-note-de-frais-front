@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MissionType } from '../interfaces/mission-type';
+import { environment } from '@/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MissionTypeService {
-  private apiUrl = 'http://localhost:8080/mission-types'; 
+  private apiUrl = environment.apiURL + '/mission-types'; 
 
   constructor(private http: HttpClient) {}
 
