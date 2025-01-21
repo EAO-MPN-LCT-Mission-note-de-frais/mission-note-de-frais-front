@@ -1,20 +1,22 @@
-import { Component } from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MissionSummaryComponent} from './mission-summary/mission-summary.component';
 import {ExpenseTableComponent} from './expense-table/expense-table.component';
 import {Status} from "../interfaces/status";
 import {Mission} from "../interfaces/mission";
+import {MatIcon} from "@angular/material/icon";
+import {MatButton, MatIconButton} from "@angular/material/button";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-expense-report',
-  standalone: true,
-  imports: [CommonModule, MissionSummaryComponent, ExpenseTableComponent],
+  imports: [CommonModule, MissionSummaryComponent, ExpenseTableComponent, MatIcon, MatButton, MatIconButton],
   templateUrl: './expense-report.component.html',
   styleUrl: './expense-report.component.css'
 })
 export class ExpenseReportComponent {
 
-  mission: Mission = {
+  mission = signal<Mission>({
     id: 1,
     startDate: new Date('2023-10-01'),
     endDate: new Date('2023-10-05'),
@@ -32,6 +34,28 @@ export class ExpenseReportComponent {
         { id: '3', date: '2023-10-03', description: undefined, type: 'Restauration', amount: 50, tax: 5 },
       ],
     }
-  };
+  });
+
+  constructor(private router: Router) {}
+
+  returnHome() {
+    this.router.navigate(['/missions']);
+  }
+
+  openCreateModal() {
+    console.log('openCreateModal');
+  }
+
+  export() {
+    console.log('export');
+  }
+
+  submit() {
+    console.log('submit');
+  }
+
+  delete() {
+    console.log('delete');
+  }
 
 }

@@ -8,3 +8,26 @@
   font-size: 1.2em;
   font-weight: bold;
 }
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-bar {
+  display: flex;
+  align-items: center;
+}
+
+.total-export-submit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.total-export-submit .actions {
+  display: flex;
+  gap: 10px;
+}
