@@ -7,10 +7,12 @@ import {Mission} from "../interfaces/mission";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {Router} from "@angular/router";
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {DeleteModalComponent} from '@/app/components/delete-modal/delete-modal.component';
 
 @Component({
   selector: 'app-expense-report',
-  imports: [CommonModule, MissionSummaryComponent, ExpenseTableComponent, MatIcon, MatButton, MatIconButton],
+  imports: [CommonModule, MatDialogModule, MissionSummaryComponent, ExpenseTableComponent, MatIcon, MatButton, MatIconButton],
   templateUrl: './expense-report.component.html',
   styleUrl: './expense-report.component.css'
 })
@@ -36,7 +38,10 @@ export class ExpenseReportComponent {
     }
   });
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
 
   returnHome() {
     this.router.navigate(['/missions']);
@@ -55,7 +60,21 @@ export class ExpenseReportComponent {
   }
 
   delete() {
-    console.log('delete');
+    const dialogRef = this.dialog.open(DeleteModalComponent, {
+      width: '600px',
+      data: {
+        title: 'Confirmation de la suppression',
+        description: 'Êtes-vous sûr de vouloir supprimer cette note de frais ?',
+        actionButtonLabel: 'Supprimer',
+        cancelButtonLabel: 'Annuler'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('delete expense report');
+      }
+    });
   }
 
 }
