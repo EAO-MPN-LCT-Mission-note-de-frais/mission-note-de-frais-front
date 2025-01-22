@@ -1,13 +1,26 @@
-
 <main class="main">
   <nav>
     <ul>
-      <li>
-        <a routerLink="/expense-report/1">Notes de frais</a>
-        <a routerLink="/mission-type">Nature de mission</a>
-      </li>
+      @if (isAuthenticated()) {
+        <li>
+          <a routerLink="/expense-report">Notes de frais</a>
+        </li>
+        <li>
+          <a routerLink="/mission-type">Nature de mission</a>
+        </li>
+        <li>
+          <a routerLink="/missions">Missions</a>
+        </li>
+        <li>
+          <a (click)="logout()">Déconnecter</a>
+        </li>
+      } @else {
+        <li>
+          <a routerLink="/auth/login">Connexion</a>
+        </li>
+      }
     </ul>
   </nav>
 </main>
 
-<router-outlet />
+<router-outlet/>
