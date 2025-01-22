@@ -8,10 +8,12 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {ColumnDefinition} from '../../interfaces/column-definition';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {DeleteModalComponent} from '@/app/components/delete-modal/delete-modal.component';
 
 @Component({
   selector: 'app-expense-table',
-  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule, MatButtonModule, MatMenuModule],
+  imports: [CommonModule, MatDialogModule, MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule, MatButtonModule, MatMenuModule],
   templateUrl: './expense-table.component.html',
   styleUrl: './expense-table.component.css'
 })
@@ -32,7 +34,7 @@ export class ExpenseTableComponent {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
+  constructor(public dialog: MatDialog) {
     effect(() => {
       this.displayedColumns = [...this.columnDefinitions.map(column => column.property), 'actions'];
       this.dataSource.data = this.expenses();
@@ -42,5 +44,23 @@ export class ExpenseTableComponent {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+  }
+
+  delete() {
+    const dialogRef = this.dialog.open(DeleteModalComponent, {
+      width: '600px',
+      data: {
+        title: 'Confirmation de la suppression',
+        description: 'Êtes-vous sûr de vouloir supprimer cette dépense ?',
+        actionButtonLabel: 'Supprimer',
+        cancelButtonLabel: 'Annuler'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('delete expense');
+      }
+    });
   }
 }
