@@ -1,0 +1,20 @@
+@use "@angular/material" as mat;
+
+// Button overrides
+:host {
+  @include mat.button-overrides(
+    (
+      filled-container-shape: 4px,
+      filled-container-height: 52px,
+    )
+  );
+}
+
+// Input overrides
+:host {
+  @include mat.form-field-overrides(
+    (
+      filled-container-color: white,
+    )
+  );
+}
