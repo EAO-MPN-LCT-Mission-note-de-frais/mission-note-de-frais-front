@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MissionSummaryComponent} from './mission-summary/mission-summary.component';
 import {ExpenseTableComponent} from './expense-table/expense-table.component';
@@ -6,14 +6,11 @@ import {Status} from "../interfaces/status";
 import {Mission} from "../interfaces/mission";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatDialogModule} from '@angular/material/dialog';
-import {DeleteModalComponent} from '@/app/components/delete-modal/delete-modal.component';
-import {ActivatedRoute, Router} from "@angular/router";
-import {ExpenseService} from '@/app/services/expense.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-expense-report',
-  imports: [CommonModule, MatDialogModule, MissionSummaryComponent, ExpenseTableComponent, MatIcon, MatButton, MatIconButton],
+  imports: [CommonModule, MissionSummaryComponent, ExpenseTableComponent, MatIcon, MatButton, MatIconButton],
   templateUrl: './expense-report.component.html',
   styleUrl: './expense-report.component.css'
 })
@@ -36,7 +33,10 @@ export class ExpenseReportComponent implements OnInit {
     }
   });
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loadExpenseReport()
