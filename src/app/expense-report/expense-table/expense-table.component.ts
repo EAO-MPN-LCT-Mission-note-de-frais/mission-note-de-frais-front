@@ -22,7 +22,7 @@ export class ExpenseTableComponent {
 
   columnDefinitions: ColumnDefinition[] = [
     { property: 'date', label: 'Date', sortable: true, formatter: (value: string) => new Date(value).toLocaleDateString()},
-    { property: 'type', label: 'Nature de frais', sortable: true },
+    { property: 'expenseType', label: 'Nature de frais', sortable: true },
     { property: 'description', label: 'Description', sortable: false },
     { property: 'amount', label: 'Montant TTC (en €)', sortable: false, formatter: (value: number) => `${value.toFixed(2)} €` },
     { property: 'tax', label: '% de TVA', sortable: false, formatter: (value: number) => `${value} %`  },

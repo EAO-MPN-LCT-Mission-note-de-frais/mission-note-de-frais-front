@@ -1,4 +1,4 @@
-<div class="expense-report-container">
+<div class="expense-report-container" *ngIf="mission(); else loading">
   <div class="title-bar">
     <button mat-icon-button (click)="returnHome()" aria-label="Retour à la page d'accueil">
       <mat-icon>arrow_back</mat-icon>
@@ -30,3 +30,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  <p>Loading mission details...</p>
+</ng-template>

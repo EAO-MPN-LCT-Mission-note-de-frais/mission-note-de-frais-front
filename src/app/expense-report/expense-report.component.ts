@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MissionSummaryComponent} from './mission-summary/mission-summary.component';
 import {ExpenseTableComponent} from './expense-table/expense-table.component';
@@ -6,7 +6,8 @@ import {Status} from "../interfaces/status";
 import {Mission} from "../interfaces/mission";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {ExpenseService} from '@/app/services/expense.service';
 
 @Component({
   selector: 'app-expense-report',
@@ -14,29 +15,64 @@ import {Router} from "@angular/router";
   templateUrl: './expense-report.component.html',
   styleUrl: './expense-report.component.css'
 })
-export class ExpenseReportComponent {
-
+export class ExpenseReportComponent implements OnInit {
+  private expenseService = inject(ExpenseService);
+  private route = inject(ActivatedRoute);
   mission = signal<Mission>({
-    id: 1,
-    startDate: new Date('2023-10-01'),
-    endDate: new Date('2023-10-05'),
-    startTown: 'Paris',
-    endTown: 'Lyon',
-    status: Status.EN_ATTENTE_VALIDATION,
-    transportIds: [1],
+    id: 0,
+    startDate: new Date(),
+    endDate: new Date(),
+    startTown: '',
+    endTown: '',
+    status: Status.INITIALE,
+    transportIds: [],
     expenseReport: {
-      id: 1,
-      amount: 855,
-      status: Status.VALIDEE,
-      expenses: [
-        { id: '1', date: '2023-10-01', description: 'Billet de train', type: 'Transport', amount: 150, tax: 20 },
-        { id: '2', date: '2023-11-02', description: 'Hôtel', type: 'Logement', amount: 400, tax: 10 },
-        { id: '3', date: '2023-10-03', description: undefined, type: 'Restauration', amount: 50, tax: 5 },
-      ],
+      id: 0,
+      amount: 0,
+      status: Status.INITIALE,
+      expenses: []
     }
   });
 
   constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadExpenseReport()
+    //TODO: à supprimer après verif quand authent effective
+    this.expenseService.getExpensesByExpenseReportId(123).subscribe(expenses => {
+      console.log('Données récupérées par le service des dépenses :', expenses);
+    });
+  }
+
+  //TODO: à refaire sans le mock quand Mission service sera près
+  loadExpenseReport() {
+    const expenseReportId = Number(this.route.snapshot.paramMap.get('id'));
+    if (!isNaN(expenseReportId)) {
+      this.expenseService.getExpensesByExpenseReportId(expenseReportId).subscribe({
+        next: (expenses) => {
+          const mockMission: Mission = {
+            id: 0,
+            startDate: new Date(),
+            endDate: new Date(),
+            startTown: 'Placeholder',
+            endTown: 'Placeholder',
+            status: Status.INITIALE,
+            transportIds: [],
+            expenseReport: {
+              id: expenseReportId,
+              amount: expenses.reduce((sum, e) => sum + e.amount, 0),
+              status: Status.INITIALE,
+              expenses: expenses
+            }
+          };
+          this.mission.set(mockMission);
+        },
+        error: (error) => {
+          console.error('Erreur lors de la récupération de la note de frais: ', error);
+        }
+      })
+    }
+  }
 
   returnHome() {
     this.router.navigate(['/missions']);
