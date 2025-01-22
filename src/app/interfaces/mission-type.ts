@@ -1,12 +1,50 @@
 export interface MissionType {
-    id: number;                     // Identifiant unique du type de mission
-    label: string;                  // Nom du type de mission
-    isCharged: boolean;             // Indique si le type de mission est facturable
-    isBonus: boolean;               // Indique si une prime est incluse
-    averageDailyRate?: number;      // Taux journalier moyen (facultatif)
-    bonusPercentage?: number;       // Pourcentage de la prime (facultatif)
-    startDate: string;              // Date de début de validité (au format ISO : 'YYYY-MM-DD')
-    endDate?: string;               // Date de fin de validité (facultatif, au format ISO)
-    missionIds?: number[];          // Liste des identifiants des missions associées (facultatif)
-  }
-  
+  /**
+   * The unique identifier for the mission type.
+   */
+  id: number;
+
+  /**
+   * The name of the mission type.
+   */
+  label: string;
+
+  /**
+   * Indicates whether the mission type is chargeable.
+   */
+  isCharged: boolean;
+
+  /**
+   * Indicates whether the mission type includes a bonus.
+   */
+  isBonus: boolean;
+
+  /**
+   * The average daily rate for this mission type, if applicable.
+   * This is an optional field.
+   */
+  averageDailyRate?: number;
+
+  /**
+   * The bonus percentage for this mission type, if applicable.
+   * This is an optional field.
+   */
+  bonusPercentage?: number;
+
+  /**
+   * The start date for the validity of the mission type (ISO format: 'YYYY-MM-DD').
+   */
+  startDate: string;
+
+  /**
+   * The end date for the validity of the mission type, if applicable (ISO format: 'YYYY-MM-DD').
+   * This is an optional field.
+   */
+  endDate?: string;
+
+  /**
+   * The list of mission IDs associated with this mission type, if applicable.
+   * This is an optional field.
+   */
+  missionIds?: number[];
+}
