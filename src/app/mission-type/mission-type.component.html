@@ -18,17 +18,21 @@
 
     <ng-container matColumnDef="isCharged">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Facturé</th>
-      <td mat-cell *matCellDef="let element">{{ element.isCharged ? 'Oui' : 'Non' }}</td>
+      <td mat-cell *matCellDef="let element">
+        <mat-checkbox [checked]="element.isCharged" disabled></mat-checkbox>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="isBonus">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Prime</th>
-      <td mat-cell *matCellDef="let element">{{ element.isBonus ? 'Oui' : 'Non' }}</td>
+      <td mat-cell *matCellDef="let element">
+        <mat-checkbox [checked]="element.isBonus" disabled></mat-checkbox>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="tjm">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>TJM</th>
-      <td mat-cell *matCellDef="let element">{{ element.tjm }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.averageDailyRate }}</td>
     </ng-container>
 
     <ng-container matColumnDef="bonusPercentage">

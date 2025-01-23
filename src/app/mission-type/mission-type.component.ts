@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule, Router } from '@angular/router';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-mission-type',
@@ -21,7 +22,8 @@ import { RouterModule, Router } from '@angular/router';
     MatSortModule,
     MatIconModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+    MatCheckboxModule
   ],
   templateUrl: './mission-type.component.html',
   styleUrls: ['./mission-type.component.css']
