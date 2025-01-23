@@ -77,3 +77,9 @@ a.btn-primary {
     text-decoration: none;
   }
 }
+
+.grayed-out {
+  background-color: #f0f0f0; /* Fond gris clair */
+  text-decoration: line-through; /* Barrer le texte */
+  color: #888; /* Texte gris clair */
+}
