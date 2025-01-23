@@ -11,23 +11,14 @@ import {AuthService} from '@/app/services/auth.service';
 export class MissionTypeService {
   private apiUrl = environment.apiURL + '/mission-types';
 
-  constructor(private http: HttpClient, private authService: AuthService) {
-  }
-
-  getHttpOptions() {
-    return {
-      headers: {
-        'Authorization': 'Bearer ' + this.authService.getToken()
-      }
-    }
-  }
+  constructor(private http: HttpClient) {}
 
   /**
    * Récupère la liste des types de mission.
    * @returns Observable<MissionType[]>
    */
   getMissionTypes(): Observable<MissionType[]> {
-    return this.http.get<MissionType[]>(this.apiUrl, this.getHttpOptions());
+    return this.http.get<MissionType[]>(this.apiUrl);
   }
 
   /**
