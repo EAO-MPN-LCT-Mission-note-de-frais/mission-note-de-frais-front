@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MissionTypeService } from '../services/mission-type.service';
 import { MissionType } from '../interfaces/mission-type';
@@ -10,6 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule, Router } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MissionTypeModalComponent } from '@/app/mission-type/mission-type-modal/mission-type-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-mission-type',
@@ -23,7 +26,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
   templateUrl: './mission-type.component.html',
   styleUrls: ['./mission-type.component.css']
@@ -33,6 +36,7 @@ export class MissionTypeComponent implements OnInit {
   displayedColumns: string[] = ['label', 'isCharged', 'isBonus', 'tjm', 'bonusPercentage', 'startDate', 'endDate', 'actions'];
   dataSource = new MatTableDataSource<MissionType>();
   errorMessage = '';
+  private dialog = inject(MatDialog);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -40,7 +44,7 @@ export class MissionTypeComponent implements OnInit {
   constructor(
     private missionTypeService: MissionTypeService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadMissionTypes();
@@ -72,5 +76,26 @@ export class MissionTypeComponent implements OnInit {
 
   returnHome(): void {
     this.router.navigate(['/missions']);
+  }
+
+  openModal(missionType?: MissionType): void {
+    const dialogRef = this.dialog.open(MissionTypeModalComponent, {
+      data: missionType || null,
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (missionType) {
+          this.missionTypeService.updateMissionType(missionType.id, result).subscribe(() => {
+            this.loadMissionTypes();
+          });
+        } else {
+          this.missionTypeService.createMissionType(result).subscribe(() => {
+            this.loadMissionTypes();
+          });
+        }
+      }
+    });
   }
 }
