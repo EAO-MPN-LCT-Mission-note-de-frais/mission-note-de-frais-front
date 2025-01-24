@@ -31,3 +31,8 @@
   display: flex;
   gap: 10px;
 }
+
+.error-snackbar {
+  background-color: #f44336; /* Rouge Material Design */
+  color: white;
+}

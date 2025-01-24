@@ -26,11 +26,11 @@
     <div class="actions">
       <button mat-raised-button (click)="export()">Exporter en PDF</button>
       <button mat-raised-button (click)="submit()">Soumettre</button>
-      <button mat-raised-button (click)="delete()">Supprimer</button>
+      <button *ngIf="!isDeleteDisabled" mat-raised-button (click)="delete()">Supprimer</button>
     </div>
   </div>
 </div>
 
 <ng-template #loading>
-  <p>Loading mission details...</p>
+  <p>Chargement...</p>
 </ng-template>

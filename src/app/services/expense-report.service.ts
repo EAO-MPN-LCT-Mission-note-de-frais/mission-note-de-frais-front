@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {environment} from '@/environments/environment.development';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {ExpenseReport} from '@/app/interfaces/expense-report';
+import {ApiResponse} from '@/app/interfaces/api-response';
 
 @Injectable({
   providedIn: 'root'
@@ -15,38 +16,46 @@ export class ExpenseReportService {
   /**
    * Retrieves an expense report by its ID.
    * @param id The ID of the expense report.
-   * @returns An Observable of the Mission object.
+   * @returns An Observable containing either the ExpenseReport object or null if not found.
    */
-  getExpenseReport(id: number): Observable<ExpenseReport> {
-    return this.http.get<ExpenseReport>(`${this.apiUrl}/${id}`);
+  getExpenseReport(id: number): Observable<ExpenseReport | null> {
+    return this.http.get<ApiResponse<ExpenseReport>>(`${this.apiUrl}/${id}`).pipe(
+      map(response => response.data)
+    );
   }
 
   /**
    * Creates a new expense report.
    * @param expenseReport The expense report data to create.
    * @param missionId The ID of the mission associated with the expense report.
-   * @returns An Observable of the backend's ResponseEntity. The response body contains a success/failure message.
+   * @returns An Observable containing the success/failure message from the backend.
    */
-  createExpenseReport(expenseReport: ExpenseReport, missionId: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}?missionId=${missionId}`, expenseReport);
+  createExpenseReport(expenseReport: ExpenseReport, missionId: number): Observable<string> {
+    return this.http.post<ApiResponse<string>>(`${this.apiUrl}?missionId=${missionId}`, expenseReport).pipe(
+      map(response => response.message)
+    );
   }
 
   /**
    * Updates an existing expense report.
    * @param expenseReport The expense report data to update.
-   * @returns An Observable of the backend's ResponseEntity. The response body contains a success/failure message.
+   * @returns An Observable containing the success/failure message from the backend.
    */
-  updateExpenseReport(expenseReport: ExpenseReport): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${expenseReport.id}`, expenseReport);
+  updateExpenseReport(expenseReport: ExpenseReport): Observable<string> {
+    return this.http.put<ApiResponse<string>>(`${this.apiUrl}/${expenseReport.id}`, expenseReport).pipe(
+      map(response => response.message)
+    );
   }
 
   /**
    * Deletes an expense report by its ID.
    * @param id The ID of the expense report to delete.
-   * @returns An Observable of the backend's ResponseEntity. The response body contains a success/failure message.
+   * @returns An Observable containing the success/failure message from the backend.
    */
-  deleteExpenseReport(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  deleteExpenseReport(id: number): Observable<string> {
+    return this.http.delete<ApiResponse<string>>(`${this.apiUrl}/${id}`).pipe(
+      map(response => response.message)
+    );
   }
 
   /**
