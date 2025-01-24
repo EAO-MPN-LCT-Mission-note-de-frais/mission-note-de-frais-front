@@ -10,7 +10,7 @@ describe('MissionTypeModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [MissionTypeModalComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(MissionTypeModalComponent);
     component = fixture.componentInstance;

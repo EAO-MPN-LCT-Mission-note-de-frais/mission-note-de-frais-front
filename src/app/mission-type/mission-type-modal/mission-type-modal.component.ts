@@ -50,8 +50,6 @@ export class MissionTypeModalComponent {
         ],
       ],
     });
-
-    // Mettre à jour la validation des champs dépendants
     this.form.get('isCharged')?.valueChanges.subscribe(() => this.updateValidation());
     this.form.get('isBonus')?.valueChanges.subscribe(() => this.updateValidation());
   }

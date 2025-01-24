@@ -1,55 +1,44 @@
-/* Centrer le titre */
 .modal-title {
     text-align: center;
     margin-bottom: 16px;
 }
 
-/* Conteneur principal du formulaire */
 .form-container {
     display: flex;
     flex-direction: column;
     gap: 16px;
     overflow: hidden;
-    /* Supprime les ascenseurs inutiles */
 }
 
-/* Alignement horizontal des cases à cocher */
 .checkbox-container {
     display: flex;
     justify-content: space-between;
     gap: 16px;
 }
 
-/* Aligner TJM et Prime sur une ligne */
 .inputs-row {
     display: flex;
     justify-content: space-between;
     gap: 16px;
 }
 
-/* Taille fixe des champs */
 .input-container {
     flex: 1;
 }
 
-/* Champ de formulaire en pleine largeur */
 .full-width {
     width: 100%;
 }
 
-/* Ajuste la taille de la modale */
 .mat-dialog-container {
     width: 700px;
     max-height: 90vh;
-    /* Limite la hauteur pour les grands écrans */
     padding: 16px;
     overflow: auto;
-    /* Permet le défilement uniquement si nécessaire */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Boutons alignés en bas */
 .dialog-actions {
     display: flex;
     justify-content: space-between;
