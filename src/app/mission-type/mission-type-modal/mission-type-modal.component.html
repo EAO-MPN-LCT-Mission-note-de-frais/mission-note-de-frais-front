@@ -13,9 +13,7 @@
       <mat-checkbox formControlName="isBonus">Prime</mat-checkbox>
     </div>
 
-    <!-- Champs alignés côte à côte -->
     <div class="inputs-row">
-      <!-- Champ TJM sous la case "Facturé" -->
       <div *ngIf="form.get('isCharged')?.value" class="input-container">
         <mat-form-field appearance="fill">
           <mat-label>TJM</mat-label>
@@ -25,7 +23,6 @@
         </mat-form-field>
       </div>
 
-      <!-- Champ Prime sous la case "Prime" -->
       <div *ngIf="form.get('isBonus')?.value" class="input-container">
         <mat-form-field appearance="fill">
           <mat-label>% Prime</mat-label>
@@ -35,8 +32,6 @@
         </mat-form-field>
       </div>
     </div>
-
-    <!-- Boutons en bas -->
     <div class="dialog-actions">
       <button mat-button (click)="close()">Annuler</button>
       <button mat-raised-button color="primary" (click)="save()" [disabled]="!form.valid">Enregistrer</button>
