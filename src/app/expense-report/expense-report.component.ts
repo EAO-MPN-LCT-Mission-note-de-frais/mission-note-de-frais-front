@@ -23,6 +23,9 @@ export class ExpenseReportComponent implements OnInit {
   private expenseService = inject(ExpenseService);
   private expenseReportService = inject(ExpenseReportService)
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private errorHandlerService = inject(ErrorHandlerService);
+  private dialog = inject(MatDialog);
 
   isDeleteDisabled: boolean = false;
 
@@ -41,12 +44,6 @@ export class ExpenseReportComponent implements OnInit {
       expenses: []
     }
   });
-
-  constructor(
-    private router: Router,
-    private errorHandlerService: ErrorHandlerService,
-    public dialog: MatDialog
-  ) {}
 
   ngOnInit(): void {
     this.loadExpenseReport()
@@ -86,6 +83,9 @@ export class ExpenseReportComponent implements OnInit {
       })
     }
   }
+  onRefreshExpenses() {
+    this.loadExpenseReport();
+  }
 
   returnHome() {
     this.router.navigate(['/missions']);
@@ -105,8 +105,8 @@ export class ExpenseReportComponent implements OnInit {
   }
 
   validateDelete(): boolean {
-    const status = this.mission().expenseReport.status;
-    return status == 'INITIALE' || status == 'REJETEE';
+    const expenseReportStatus = this.mission().expenseReport.status;
+    return expenseReportStatus == Status.INITIALE || expenseReportStatus == Status.REJETEE;
   }
 
   delete() {
@@ -121,8 +121,9 @@ export class ExpenseReportComponent implements OnInit {
         }
       });
 
-      dialogRef.afterClosed().subscribe(() => {
-         const expenseReportId = this.mission().expenseReport.id;
+      dialogRef.afterClosed().subscribe(result => {
+        if (result?.confirmed) {
+          const expenseReportId = this.mission().expenseReport.id;
           this.expenseReportService.deleteExpenseReport(expenseReportId).subscribe({
             next: (message) => {
               console.log(message);
@@ -132,6 +133,7 @@ export class ExpenseReportComponent implements OnInit {
               this.errorHandlerService.handleError(error, "Une erreur est survenue lors de la suppression.");
             }
           });
+        }
       });
     }
   }

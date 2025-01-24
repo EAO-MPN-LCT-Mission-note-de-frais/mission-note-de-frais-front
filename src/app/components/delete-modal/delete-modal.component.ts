@@ -16,10 +16,15 @@ export class DeleteModalComponent {
 
   constructor(
     public dialogRef: MatDialogRef<CustomModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: {
+      title: string,
+      description: string,
+      actionButtonLabel: string,
+      cancelButtonLabel: string,
+      expenseId?: number }
   ) {}
 
-  onCloseClick(): void {
-    this.dialogRef.close();
+  onConfirmClick(): void {
+    this.dialogRef.close({ confirmed: true, expenseId: this.data.expenseId});
   }
 }

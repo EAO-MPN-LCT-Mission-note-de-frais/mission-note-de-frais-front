@@ -17,7 +17,11 @@
       <mat-icon>add</mat-icon>
     </button>
   </div>
-  <app-expense-table [expenses]="mission().expenseReport.expenses"></app-expense-table>
+  <app-expense-table
+    [expenses]="mission().expenseReport.expenses"
+    [expenseReportStatus]="mission().expenseReport.status"
+    (refreshExpenses)="onRefreshExpenses()"
+  ></app-expense-table>
 
   <div class="total-export-submit">
     <div class="total">
