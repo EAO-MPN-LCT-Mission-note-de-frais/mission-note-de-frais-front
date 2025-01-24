@@ -1,9 +1,10 @@
+
 <main class="main">
   <nav>
     <ul>
       @if (isAuthenticated()) {
         <li>
-          <a routerLink="/expense-report">Notes de frais</a>
+          <a routerLink="/expense-report/1">Notes de frais</a>
         </li>
         <li>
           <a routerLink="/mission-type">Nature de mission</a>
@@ -23,4 +24,4 @@
   </nav>
 </main>
 
-<router-outlet/>
+<router-outlet />

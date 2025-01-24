@@ -23,7 +23,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'expense-report',
+    path: 'expense-report/:id',
     component: ExpenseReportComponent,
     canActivate: [AuthGuard],
   },

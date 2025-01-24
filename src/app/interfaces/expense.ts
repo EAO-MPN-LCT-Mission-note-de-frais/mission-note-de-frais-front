@@ -17,7 +17,7 @@ export interface Expense {
   /**
    * Type of the expense, e.g., "Transport", "Accommodation", "Dining", etc.
    */
-  type: string;
+  expenseType: string;
 
   /**
    * Expense amount (in EUR or default currency).

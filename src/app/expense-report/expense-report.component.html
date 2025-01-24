@@ -1,4 +1,4 @@
-<div class="expense-report-container">
+<div class="expense-report-container" *ngIf="mission(); else loading">
   <div class="title-bar">
     <button mat-icon-button (click)="returnHome()" aria-label="Retour à la page d'accueil">
       <mat-icon>arrow_back</mat-icon>
@@ -17,7 +17,11 @@
       <mat-icon>add</mat-icon>
     </button>
   </div>
-  <app-expense-table [expenses]="mission().expenseReport.expenses"></app-expense-table>
+  <app-expense-table
+    [expenses]="mission().expenseReport.expenses"
+    [expenseReportStatus]="mission().expenseReport.status"
+    (refreshExpenses)="onRefreshExpenses()"
+  ></app-expense-table>
 
   <div class="total-export-submit">
     <div class="total">
@@ -26,7 +30,11 @@
     <div class="actions">
       <button mat-raised-button (click)="export()">Exporter en PDF</button>
       <button mat-raised-button (click)="submit()">Soumettre</button>
-      <button mat-raised-button (click)="delete()">Supprimer</button>
+      <button *ngIf="!isDeleteDisabled" mat-raised-button (click)="delete()">Supprimer</button>
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  <p>Chargement...</p>
+</ng-template>

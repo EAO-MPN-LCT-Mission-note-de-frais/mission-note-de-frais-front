@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MissionSummaryComponent} from './mission-summary/mission-summary.component';
 import {ExpenseTableComponent} from './expense-table/expense-table.component';
@@ -6,42 +6,86 @@ import {Status} from "../interfaces/status";
 import {Mission} from "../interfaces/mission";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
-import {Router} from "@angular/router";
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from "@angular/router";
+import {ExpenseService} from '@/app/services/expense.service';
+import {MatDialog} from '@angular/material/dialog';
 import {DeleteModalComponent} from '@/app/components/delete-modal/delete-modal.component';
+import {ExpenseReportService} from '@/app/services/expense-report.service';
+import { ErrorHandlerService } from '../utils/error-handler.service';
 
 @Component({
   selector: 'app-expense-report',
-  imports: [CommonModule, MatDialogModule, MissionSummaryComponent, ExpenseTableComponent, MatIcon, MatButton, MatIconButton],
+  imports: [CommonModule, MissionSummaryComponent, ExpenseTableComponent, MatIcon, MatButton, MatIconButton],
   templateUrl: './expense-report.component.html',
   styleUrl: './expense-report.component.css'
 })
-export class ExpenseReportComponent {
+export class ExpenseReportComponent implements OnInit {
+  private expenseService = inject(ExpenseService);
+  private expenseReportService = inject(ExpenseReportService)
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private errorHandlerService = inject(ErrorHandlerService);
+  private dialog = inject(MatDialog);
+
+  isDeleteDisabled: boolean = false;
 
   mission = signal<Mission>({
-    id: 1,
-    startDate: new Date('2023-10-01'),
-    endDate: new Date('2023-10-05'),
-    startTown: 'Paris',
-    endTown: 'Lyon',
-    status: Status.EN_ATTENTE_VALIDATION,
-    transportIds: [1],
+    id: 0,
+    startDate: new Date(),
+    endDate: new Date(),
+    startTown: '',
+    endTown: '',
+    status: Status.INITIALE,
+    transportIds: [],
     expenseReport: {
-      id: 1,
-      amount: 855,
-      status: Status.VALIDEE,
-      expenses: [
-        { id: '1', date: '2023-10-01', description: 'Billet de train', type: 'Transport', amount: 150, tax: 20 },
-        { id: '2', date: '2023-11-02', description: 'Hôtel', type: 'Logement', amount: 400, tax: 10 },
-        { id: '3', date: '2023-10-03', description: undefined, type: 'Restauration', amount: 50, tax: 5 },
-      ],
+      id: 0,
+      amount: 0,
+      status: Status.INITIALE,
+      expenses: []
     }
   });
 
-  constructor(
-    private router: Router,
-    public dialog: MatDialog
-  ) {}
+  ngOnInit(): void {
+    this.loadExpenseReport()
+  }
+
+  //TODO: à refaire sans le mock quand Mission service sera près
+  loadExpenseReport() {
+    const expenseReportId = Number(this.route.snapshot.paramMap.get('id'));
+    if (!isNaN(expenseReportId)) {
+      this.expenseService.getExpensesByExpenseReportId(expenseReportId).subscribe({
+        next: (expenses) => {
+          if (expenses) {
+            const mockMission: Mission = {
+              id: 0,
+              startDate: new Date(),
+              endDate: new Date(),
+              startTown: 'Placeholder',
+              endTown: 'Placeholder',
+              status: Status.INITIALE,
+              transportIds: [],
+              expenseReport: {
+                id: expenseReportId,
+                amount: expenses.reduce((sum, e) => sum + e.amount, 0),
+                status: Status.INITIALE,
+                expenses: expenses
+              }
+            };
+            this.mission.set(mockMission);
+            this.isDeleteDisabled = !this.validateDelete();
+          } else {
+            this.errorHandlerService.handleError("","Erreur lors de la récupération des dépenses.");
+          }
+        },
+        error: (error) => {
+          this.errorHandlerService.handleError(error, "Erreur lors de la récupération de la note de frais.");
+        }
+      })
+    }
+  }
+  onRefreshExpenses() {
+    this.loadExpenseReport();
+  }
 
   returnHome() {
     this.router.navigate(['/missions']);
@@ -57,24 +101,40 @@ export class ExpenseReportComponent {
 
   submit() {
     console.log('submit');
+    this.isDeleteDisabled = !this.validateDelete();
+  }
+
+  validateDelete(): boolean {
+    const expenseReportStatus = this.mission().expenseReport.status;
+    return expenseReportStatus == Status.INITIALE || expenseReportStatus == Status.REJETEE;
   }
 
   delete() {
-    const dialogRef = this.dialog.open(DeleteModalComponent, {
-      width: '600px',
-      data: {
-        title: 'Confirmation de la suppression',
-        description: 'Êtes-vous sûr de vouloir supprimer cette note de frais ?',
-        actionButtonLabel: 'Supprimer',
-        cancelButtonLabel: 'Annuler'
-      }
-    });
+    if (this.validateDelete()) {
+      const dialogRef = this.dialog.open(DeleteModalComponent, {
+        width: '600px',
+        data: {
+          title: 'Confirmation de la suppression',
+          description: 'Êtes-vous sûr de vouloir supprimer cette note de frais ?',
+          actionButtonLabel: 'Supprimer',
+          cancelButtonLabel: 'Annuler'
+        }
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('delete expense report');
-      }
-    });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result?.confirmed) {
+          const expenseReportId = this.mission().expenseReport.id;
+          this.expenseReportService.deleteExpenseReport(expenseReportId).subscribe({
+            next: (message) => {
+              console.log(message);
+              this.router.navigate(['/missions']);
+            },
+            error: (error) => {
+              this.errorHandlerService.handleError(error, "Une erreur est survenue lors de la suppression.");
+            }
+          });
+        }
+      });
+    }
   }
-
 }

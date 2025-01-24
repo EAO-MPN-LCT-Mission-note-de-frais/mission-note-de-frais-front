@@ -1,4 +1,5 @@
 import {Expense} from './expense';
+import {Status} from '@/app/interfaces/status';
 
 export interface ExpenseReport {
   /**
@@ -14,13 +15,12 @@ export interface ExpenseReport {
   /**
    * The status of the expense report.
    */
-  status: string;
+  status: Status;
 
   /**
    * The list of expenses associated with this expense report.
    */
   expenses: Expense[];
-
 }
 
 export interface ExpenseReportPost extends Omit<ExpenseReport, 'id'> {}
