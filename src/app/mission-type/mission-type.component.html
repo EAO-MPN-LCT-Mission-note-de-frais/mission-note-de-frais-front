@@ -57,8 +57,8 @@
         </button>
         <mat-menu #menu="matMenu">
           <button mat-menu-item (click)="openModal(element)">Modifier</button>
-          <button mat-menu-item (click)="deleteMissionType(element.id)">Supprimer</button>
-        </mat-menu>
+          <button mat-menu-item (click)="openDeleteModal(element)">Supprimer</button>
+        </mat-menu>        
       </td>
     </ng-container>
   

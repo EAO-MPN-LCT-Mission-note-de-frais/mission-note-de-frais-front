@@ -54,9 +54,6 @@ export class MissionTypeModalComponent {
     this.form.get('isBonus')?.valueChanges.subscribe(() => this.updateValidation());
   }
 
-  /**
-   * Met à jour les validations en fonction des champs dépendants.
-   */
   updateValidation(): void {
     const isCharged = this.form.get('isCharged')?.value;
     const isBonus = this.form.get('isBonus')?.value;
@@ -76,9 +73,6 @@ export class MissionTypeModalComponent {
     this.form.get('bonusPercentage')?.updateValueAndValidity();
   }
 
-  /**
-   * Permet d'appliquer un validateur conditionnel.
-   */
   conditionalValidator(conditionFn: () => boolean, validator: any) {
     return (control: any) => {
       if (!control || !conditionFn()) {

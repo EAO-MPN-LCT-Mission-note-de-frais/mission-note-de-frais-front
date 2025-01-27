@@ -12,6 +12,7 @@ import { RouterModule, Router } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MissionTypeModalComponent } from '@/app/mission-type/mission-type-modal/mission-type-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteModalComponent } from '../components/delete-modal/delete-modal.component';
 
 
 @Component({
@@ -98,4 +99,33 @@ export class MissionTypeComponent implements OnInit {
       }
     });
   }
+  openDeleteModal(missionType: MissionType): void {
+    const dialogRef = this.dialog.open(DeleteModalComponent, {
+      width: '500px',
+      data: {
+        title: 'Confirmation de suppression',
+        description: missionType.endDate
+          ? 'Êtes-vous sûr de vouloir supprimer la nature de mission ?'
+          : 'Des missions sont rattachées à cette nature de mission. Voulez-vous définir la date de fin à aujourd’hui ?',
+        actionButtonLabel: missionType.endDate ? 'Supprimer' : 'Définir une date de fin',
+        cancelButtonLabel: 'Annuler',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirmed) {
+        if (missionType.endDate) {
+          this.missionTypeService.deleteMissionType(missionType.id).subscribe(() => {
+            this.loadMissionTypes(); 
+          });
+        } else {
+          const updatedMissionType = { ...missionType, endDate: new Date().toISOString() };
+          this.missionTypeService.updateMissionType(missionType.id, updatedMissionType).subscribe(() => {
+            this.loadMissionTypes();
+          });
+        }
+      }
+    });
+  }
+
 }
