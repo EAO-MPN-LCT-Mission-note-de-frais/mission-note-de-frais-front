@@ -1,0 +1,46 @@
+.modal-title {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: hidden;
+}
+
+.checkbox-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.inputs-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.input-container {
+    flex: 1;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.mat-dialog-container {
+    width: 700px;
+    max-height: 90vh;
+    padding: 16px;
+    overflow: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+}

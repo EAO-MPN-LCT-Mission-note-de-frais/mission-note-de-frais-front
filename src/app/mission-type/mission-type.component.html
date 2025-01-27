@@ -7,7 +7,7 @@
   </div>
 
   <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
-  <a routerLink="/mission-type/new" class="btn btn-primary mb-3">Ajouter un Type</a>
+  <button mat-raised-button color="primary" (click)="openModal()">Ajouter un Type</button>
 
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="label">
@@ -56,9 +56,9 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item [routerLink]="['/mission-type', element.id, 'edit']">Modifier</button>
-          <button mat-menu-item (click)="deleteMissionType(element.id)">Supprimer</button>
-        </mat-menu>
+          <button mat-menu-item (click)="openModal(element)">Modifier</button>
+          <button mat-menu-item (click)="openDeleteModal(element)">Supprimer</button>
+        </mat-menu>        
       </td>
     </ng-container>
   
