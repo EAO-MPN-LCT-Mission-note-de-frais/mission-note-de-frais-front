@@ -17,9 +17,6 @@ export class AppComponent {
   constructor(private authService: AuthService, private router: Router) {
     this.authService.authenticated.subscribe((isAuthenticated) => {
       this.isAuthenticated.set(isAuthenticated);
-      if (!isAuthenticated) {
-        this.router.navigate(['auth/login']);
-      }
     });
   }
 

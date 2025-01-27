@@ -1,9 +1,8 @@
 <table mat-table [dataSource]="source" matSort class="mat-elevation-z8">
-
   <!-- Creat table heads -->
   @for (column of columns(); track $index) {
     {{ column.label }}
-    <ng-container [matColumnDef]="column.property">
+    <ng-container [matColumnDef]="column.id">
       @if (column.sortable) {
         <th class="text-white" mat-header-cell *matHeaderCellDef
             mat-sort-header="{{column.property}}"> {{ column.label }}
@@ -17,9 +16,20 @@
     </ng-container>
   }
 
+  <ng-container matColumnDef="billed">
+    <th mat-header-cell *matHeaderCellDef>Facturé</th>
+    <td mat-cell *matCellDef="let mission;">
+      @if (mission.missionType.isCharged) {
+        <span>Oui</span>
+      } @else {
+        <span>Non</span>
+      }
+    </td>
+  </ng-container>
+
   <!-- Set up actions button -->
   <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef> Actions</th>
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
     <td mat-cell *matCellDef>
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>

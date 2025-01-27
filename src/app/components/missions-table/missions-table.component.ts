@@ -20,12 +20,11 @@ export class MissionsTableComponent {
   data = input<Mission[]>([])
 
   sort!: MatSort;
-  source = new MatTableDataSource<unknown>();
-  headers: string[] = []
+  source = new MatTableDataSource<Mission>();
+  headers: string[] = ["dailyRate", "billed", "prime-percent", "startDate", "endDate", "status", "expense-report", "expense-report-status"];
 
   constructor() {
     effect(() => {
-      this.headers = columns.map(column => column.property).concat('actions')
       this.source.data = this.data()
       this.source.sort = this.sort
     });
