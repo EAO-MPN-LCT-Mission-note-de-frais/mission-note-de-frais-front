@@ -7,6 +7,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {columns} from '@/app/components/missions-table/mission-table-columns';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-missions-table',
@@ -21,12 +22,17 @@ export class MissionsTableComponent {
 
   sort!: MatSort;
   source = new MatTableDataSource<Mission>();
-  headers: string[] = ["dailyRate", "billed", "prime-percent", "startDate", "endDate", "status", "expense-report", "expense-report-status"];
+  headers: string[] = ["dailyRate", "billed", "prime-percent", "startDate", "endDate", "status", "expense-report", "expense-report-status", "actions"];
 
-  constructor() {
+  constructor(private router: Router) {
     effect(() => {
       this.source.data = this.data()
       this.source.sort = this.sort
     });
+  }
+
+
+  async viewExpenseReport(expenseReportId: number) {
+    await this.router.navigate(['/expense-report', expenseReportId]);
   }
 }

@@ -8,7 +8,6 @@ export const columns: TableColumns [] = [
   //   label: 'Label',
   //   sortable: true
   // },
-  // {property: 'billed', label: 'Facturé', sortable: true},
   // {property: 'prime', label: 'Prime', sortable: false},
   {
     id: 'dailyRate',
@@ -20,14 +19,6 @@ export const columns: TableColumns [] = [
       return dailyRate ? `${dailyRate.toFixed(2)} €` : "";
     }
   },
-  // {
-  //   id: 'billed',
-  //   property: 'missionType',
-  //   label: 'Facturé',
-  //   sortable: true,
-  //   formatter: (value: any) => (value.isCharged ? 'Oui' : 'Non')
-  // },
-
   {
     id: 'prime-percent',
     property: 'missionType',
@@ -74,6 +65,6 @@ export const columns: TableColumns [] = [
     property: 'expenseReport',
     label: 'Status Note de Frais',
     sortable: false,
-    formatter: (value: any) => value.status?.name ?? ""
+    formatter: (value?: any) => value?.status?.name ?? ""
   },
 ];

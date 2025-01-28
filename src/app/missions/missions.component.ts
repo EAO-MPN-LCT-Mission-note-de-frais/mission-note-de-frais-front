@@ -3,12 +3,11 @@ import {MissionService} from '@/app/services/mission.service';
 import {Mission} from '@/app/interfaces/mission';
 import {MissionsTableComponent} from '@/app/components/missions-table/missions-table.component';
 import {MatIcon} from '@angular/material/icon';
-import {MatButton, MatFabButton, MatIconButton, MatMiniFabButton} from '@angular/material/button';
-import {MatCard} from '@angular/material/card';
+import {MatMiniFabButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-missions',
-  imports: [MissionsTableComponent, MatIcon, MatIconButton, MatButton, MatFabButton, MatMiniFabButton, MatCard],
+  imports: [MissionsTableComponent, MatIcon, MatMiniFabButton],
   templateUrl: './missions.component.html',
   styleUrl: './missions.component.scss',
 })
