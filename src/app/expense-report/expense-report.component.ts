@@ -69,7 +69,7 @@ export class ExpenseReportComponent implements OnInit {
               expenseReport: {
                 id: expenseReportId,
                 amount: expenses.reduce((sum, e) => sum + e.amount, 0),
-                status: Status.INITIALE,
+                status: Status.VALIDEE,
                 expenses: expenses
               }
             };
@@ -124,6 +124,10 @@ export class ExpenseReportComponent implements OnInit {
     console.log('export');
   }
 
+  //TODO - logique à développer :
+  // Soumettre si INITIALE ou REJETEE
+  // Annuler la soumission si EN ATTENTE VALIDATION
+  // Pas de bouton si VALIDEE OU ANNULEE
   submit() {
     console.log('submit');
     this.isDeleteDisabled = !this.validateDelete();
@@ -162,4 +166,6 @@ export class ExpenseReportComponent implements OnInit {
       });
     }
   }
+
+  protected readonly Status = Status;
 }

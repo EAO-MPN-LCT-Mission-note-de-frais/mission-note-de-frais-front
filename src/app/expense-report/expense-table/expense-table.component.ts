@@ -46,7 +46,10 @@ export class ExpenseTableComponent {
 
   constructor() {
     effect(() => {
-      this.displayedColumns = [...this.columnDefinitions.map(column => column.property), 'actions'];
+      this.displayedColumns = [...this.columnDefinitions.map(column => column.property)];
+      if (this.expenseReportStatus() === Status.INITIALE || this.expenseReportStatus() === Status.REJETEE) {
+        this.displayedColumns.push('actions');
+      }
       this.dataSource.data = this.expenses();
       this.dataSource.sort = this.sort;
     });
@@ -92,4 +95,6 @@ export class ExpenseTableComponent {
       });
     }
   }
+
+  protected readonly Status = Status;
 }

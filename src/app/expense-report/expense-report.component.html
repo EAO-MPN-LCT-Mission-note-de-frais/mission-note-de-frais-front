@@ -13,8 +13,12 @@
   <!-- Tableau des dépenses -->
   <div class="table-header">
     <h2>Liste des dépenses</h2>
-    <button mat-icon-button (click)="openCreateModal()" aria-label="Ajouter une dépense">
-      <mat-icon>add</mat-icon>
+    <button
+      *ngIf="mission().expenseReport.status === Status.INITIALE || mission().expenseReport.status === Status.REJETEE"
+      mat-icon-button
+      (click)="openCreateModal()"
+      aria-label="Ajouter une dépense">
+        <mat-icon>add</mat-icon>
     </button>
   </div>
   <app-expense-table
