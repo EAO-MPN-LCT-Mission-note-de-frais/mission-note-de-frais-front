@@ -28,6 +28,7 @@ export class ExpenseTableComponent {
   expenses = input<Expense[]>([]);
   expenseReportStatus = input<Status>(Status.INITIALE);
   @Output() refreshExpenses = new EventEmitter<void>()
+  @Output() editExpense = new EventEmitter<Expense>();
 
   displayedColumns: string[] = [];
 
@@ -53,6 +54,10 @@ export class ExpenseTableComponent {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+  }
+
+  edit(expense: Expense) {
+    this.editExpense.emit(expense);
   }
 
   validateDelete(): boolean {

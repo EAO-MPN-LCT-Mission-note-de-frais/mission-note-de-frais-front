@@ -20,7 +20,7 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>Modifier</button>
+        <button mat-menu-item (click)="edit(element)">Modifier</button>
         <button mat-menu-item (click)="delete(element)">Supprimer</button>
       </mat-menu>
     </td>

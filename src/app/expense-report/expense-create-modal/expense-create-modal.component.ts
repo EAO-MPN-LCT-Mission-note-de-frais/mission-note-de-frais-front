@@ -12,13 +12,12 @@ import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {Expense} from '@/app/interfaces/expense';
 import {MatOption, MatSelect} from '@angular/material/select';
 
 @Component({
   selector: 'app-expense-create-modal',
-  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatSelect, MatOption],
+  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelect, MatOption],
   templateUrl: './expense-create-modal.component.html',
   styleUrl: './expense-create-modal.component.css'
 })
@@ -39,8 +38,7 @@ export class ExpenseCreateModalComponent {
       expenseType: [data?.expenseType || '', [Validators.required]],
       description: [data?.description || ''],
       amount: [data?.amount || null, [Validators.required, this.strictlyPositiveValidator]],
-      tax: [{ value: data?.tax ?? null, disabled: !data?.tax }, [Validators.min(0)]],
-      enableTax: [!!data?.tax],
+      tax: [data?.tax ?? null, [Validators.min(0)]],
     });
 
     // Gestion dynamique du champ tax

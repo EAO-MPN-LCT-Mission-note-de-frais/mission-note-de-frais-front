@@ -13,6 +13,7 @@ import {DeleteModalComponent} from '@/app/components/delete-modal/delete-modal.c
 import {ExpenseReportService} from '@/app/services/expense-report.service';
 import { ErrorHandlerService } from '../utils/error-handler.service';
 import {ExpenseCreateModalComponent} from '@/app/expense-report/expense-create-modal/expense-create-modal.component';
+import { Expense } from '../interfaces/expense';
 
 @Component({
   selector: 'app-expense-report',
@@ -103,6 +104,20 @@ export class ExpenseReportComponent implements OnInit {
         console.log("Dépense ajoutée avec succès")
       }
     })
+  }
+
+  openEditModal(expense: Expense) {
+    const dialogRef = this.dialog.open(ExpenseCreateModalComponent, {
+      width: '600px',
+      data: expense,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log("Dépense modifiée avec succès");
+        this.onRefreshExpenses();
+      }
+    });
   }
 
   export() {
