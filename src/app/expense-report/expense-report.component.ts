@@ -12,6 +12,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {DeleteModalComponent} from '@/app/components/delete-modal/delete-modal.component';
 import {ExpenseReportService} from '@/app/services/expense-report.service';
 import { ErrorHandlerService } from '../utils/error-handler.service';
+import {ExpenseCreateModalComponent} from '@/app/expense-report/expense-create-modal/expense-create-modal.component';
 
 @Component({
   selector: 'app-expense-report',
@@ -92,7 +93,16 @@ export class ExpenseReportComponent implements OnInit {
   }
 
   openCreateModal() {
-    console.log('openCreateModal');
+    const dialogRef = this.dialog.open(ExpenseCreateModalComponent, {
+      width: '600px',
+      data: null,
+    })
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log("Dépense ajoutée avec succès")
+      }
+    })
   }
 
   export() {
