@@ -1,1 +1,17 @@
-<p>missions works!</p>
+<section>
+  <div class="container max-w-[1200px] mx-auto">
+    <div class="flex justify-between items-center my-12">
+      <h1 class="text-3xl" style="display: inline-block;">Missions</h1>
+      <button mat-mini-fab class="w-8 h-8">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <!--    <mat-card appearance="raised">-->
+    <div class="shadow-md border rounded ">
+      <app-missions-table [data]="missions()"/>
+
+    </div>
+    <!--    </mat-card>-->
+  </div>
+</section>
