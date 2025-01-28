@@ -28,6 +28,7 @@ export class ExpenseTableComponent {
   expenses = input<Expense[]>([]);
   expenseReportStatus = input<Status>(Status.INITIALE);
   @Output() refreshExpenses = new EventEmitter<void>()
+  @Output() editExpense = new EventEmitter<Expense>();
 
   displayedColumns: string[] = [];
 
@@ -45,7 +46,10 @@ export class ExpenseTableComponent {
 
   constructor() {
     effect(() => {
-      this.displayedColumns = [...this.columnDefinitions.map(column => column.property), 'actions'];
+      this.displayedColumns = [...this.columnDefinitions.map(column => column.property)];
+      if (this.expenseReportStatus() === Status.INITIALE || this.expenseReportStatus() === Status.REJETEE) {
+        this.displayedColumns.push('actions');
+      }
       this.dataSource.data = this.expenses();
       this.dataSource.sort = this.sort;
     });
@@ -53,6 +57,10 @@ export class ExpenseTableComponent {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+  }
+
+  edit(expense: Expense) {
+    this.editExpense.emit(expense);
   }
 
   validateDelete(): boolean {
@@ -87,4 +95,6 @@ export class ExpenseTableComponent {
       });
     }
   }
+
+  protected readonly Status = Status;
 }

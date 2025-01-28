@@ -1,0 +1,42 @@
+.modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-title {
+  text-align: center;
+  margin-top: -10px;
+  margin-bottom: 15px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  gap: 8px;
+}
+
+.mat-form-field {
+  margin-bottom: 1.5em;
+}
+
+.mat-form-field-subscript-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-form-field-subscript-wrapper .mat-error {
+  margin: 0;
+  padding: 0;
+  height: auto;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+

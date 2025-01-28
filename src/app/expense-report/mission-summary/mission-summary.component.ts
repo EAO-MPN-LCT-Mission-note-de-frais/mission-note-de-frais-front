@@ -1,6 +1,6 @@
 import {Component, input} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Mission} from '../../interfaces/mission';
+import {MissionSummary} from '../../interfaces/mission';
 
 @Component({
   selector: 'app-mission-summary',
@@ -9,5 +9,5 @@ import {Mission} from '../../interfaces/mission';
   styleUrl: './mission-summary.component.css'
 })
 export class MissionSummaryComponent {
-  mission = input<Mission>(undefined as unknown as Mission);
+  mission = input<MissionSummary>(undefined as unknown as MissionSummary);
 }

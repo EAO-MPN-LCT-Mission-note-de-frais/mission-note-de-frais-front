@@ -1,0 +1,64 @@
+<div class="p-5 modal-content">
+  <h2 mat-dialog-title class="modal-title">{{ data ? 'Modifier' : 'Créer' }} une dépense</h2>
+
+  <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()" class="form-container">
+
+    <!-- Date -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Date</mat-label>
+      <input matInput type="date" formControlName="date" />
+      <mat-error *ngIf="expenseForm.get('date')?.hasError('required')">
+        La date est obligatoire.
+      </mat-error>
+      <mat-error *ngIf="expenseForm.get('date')?.hasError('dateBeforeMissionStart') && !expenseForm.get('date')?.hasError('required')">
+        La date ne peux pas être antérieur au de la mission ({{ missionStartDate | date: 'dd-MM-yyyy' }}).
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Expense Type -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Nature de frais</mat-label>
+      <mat-select formControlName="expenseType">
+        <mat-option *ngFor="let type of expenseTypeOptions" [value]="type">
+          {{ type }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="expenseForm.get('expenseType')?.hasError('required')">
+        La nature de frais est obligatoire.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" placeholder="Saisir une description (optionnel)"></textarea>
+    </mat-form-field>
+
+    <!-- Amount -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Montant TTC (en €)</mat-label>
+      <input matInput type="number" formControlName="amount" placeholder="Saisir le montant de la dépense" />
+      <mat-error *ngIf="expenseForm.get('amount')?.hasError('required')">
+        Le montant de la dépense est obligatoire.
+      </mat-error>
+      <mat-error *ngIf="expenseForm.get('amount')?.hasError('strictlyPositive') && !expenseForm.get('amount')?.hasError('required')">
+        Le montant doit être supérieur à 0.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Tax -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>TVA (en %)</mat-label>
+      <input matInput type="number" formControlName="tax" placeholder="Saisir le pourcentage de TVA (ex:20)" [disabled]="!expenseForm.get('tax')?.enabled" />
+      <mat-error *ngIf="expenseForm.get('tax')?.hasError('min')">
+        La TVA doit être supérieur ou égale à 0.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Buttons -->
+    <div class="dialog-actions">
+      <button mat-button type="button" (click)="onCancel()">Annuler</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="expenseForm.invalid">Enregistrer</button>
+    </div>
+  </form>
+</div>
