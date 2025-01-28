@@ -30,7 +30,7 @@ import { DeleteModalComponent } from '../components/delete-modal/delete-modal.co
     MatCheckboxModule,
   ],
   templateUrl: './mission-type.component.html',
-  styleUrls: ['./mission-type.component.css']
+  styleUrls: ['./mission-type.component.scss']
 })
 export class MissionTypeComponent implements OnInit {
   missionTypes: MissionType[] = [];
@@ -59,10 +59,27 @@ export class MissionTypeComponent implements OnInit {
   loadMissionTypes(): void {
     this.missionTypeService.getMissionTypes().subscribe({
       next: (data) => {
-        this.missionTypes = data;
-        this.dataSource.data = data;
+        this.missionTypes = this.sortMissionTypes(data);
+        this.dataSource.data = this.missionTypes;
       },
-      error: () => (this.errorMessage = 'Erreur lors du chargement des types de mission.')
+      error: () => (this.errorMessage = 'Erreur lors du chargement des types de mission.'),
+    });
+  }
+
+  sortMissionTypes(missionTypes: MissionType[]): MissionType[] {
+    return missionTypes.sort((a, b) => {
+      if (!a.endDate && b.endDate) return -1;
+      if (a.endDate && !b.endDate) return 1;
+
+      if (!a.endDate && !b.endDate) {
+        return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+      }
+
+      if (a.endDate && b.endDate) {
+        return new Date(b.endDate).getTime() - new Date(a.endDate).getTime();
+      }
+
+      return 0;
     });
   }
 
@@ -116,7 +133,7 @@ export class MissionTypeComponent implements OnInit {
       if (result?.confirmed) {
         if (missionType.endDate) {
           this.missionTypeService.deleteMissionType(missionType.id).subscribe(() => {
-            this.loadMissionTypes(); 
+            this.loadMissionTypes();
           });
         } else {
           const updatedMissionType = { ...missionType, endDate: new Date().toISOString() };
