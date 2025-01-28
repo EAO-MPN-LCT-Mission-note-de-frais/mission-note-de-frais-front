@@ -1,4 +1,4 @@
-import {Component, Inject, inject} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
   AbstractControl,
@@ -26,7 +26,7 @@ export class ExpenseCreateModalComponent {
   expenseForm: FormGroup;
   //TODO implement missionStartDate et expenseTypeOption
   missionStartDate = new Date('2024-01-01');
-  expenseTypeOptions = ['Transport', 'Logement', 'Repas', 'Divers'];
+  expenseTypeOptions = ['Transport', 'Hotel', 'Repas', 'Divers'];
 
   constructor(
     private fb: FormBuilder,
@@ -39,16 +39,6 @@ export class ExpenseCreateModalComponent {
       description: [data?.description || ''],
       amount: [data?.amount || null, [Validators.required, this.strictlyPositiveValidator]],
       tax: [data?.tax ?? null, [Validators.min(0)]],
-    });
-
-    // Gestion dynamique du champ tax
-    this.expenseForm.get('enableTax')?.valueChanges.subscribe((enable) => {
-      if (enable) {
-        this.expenseForm.get('tax')?.enable();
-      } else {
-        this.expenseForm.get('tax')?.disable();
-        this.expenseForm.get('tax')?.reset();
-      }
     });
   }
 
@@ -72,6 +62,9 @@ export class ExpenseCreateModalComponent {
 
   onSubmit() {
     if (this.expenseForm.valid) {
+      if (this.expenseForm.get('tax')?.value === null || this.expenseForm.get('tax')?.value === '') {
+        this.expenseForm.get('tax')?.setValue(0);
+      }
       this.dialogRef.close(this.expenseForm.value);
     }
   }

@@ -40,7 +40,9 @@ export interface Mission {
   /**
    * The expense report of the mission
    */
-  expenseReport: ExpenseReport;
+  expenseReport?: ExpenseReport;
 }
 
 export interface MissionPost extends Omit<Mission, 'id'> {}
+export type MissionSummary = Omit<Mission, "expenseReport"> & {  expenseReport: ExpenseReport}
+

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from '@/environments/environment.development';
-import {HttpClient} from '@angular/common/http';
-import {Expense} from '@/app/interfaces/expense';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Expense, ExpensePost} from '@/app/interfaces/expense';
 import {Observable, map} from 'rxjs';
 import {ApiResponse} from '@/app/interfaces/api-response';
 
@@ -41,8 +41,9 @@ export class ExpenseService {
    * @param expenseReportId The ID of the expense report associated with the expense.
    * @returns An Observable containing the success/failure message from the backend.
    */
-  createExpense(expense: Expense, expenseReportId: number): Observable<string> {
-    return this.http.post<ApiResponse<string>>(`${this.apiUrl}?expenseReportId=${expenseReportId}`, expense).pipe(
+  createExpense(expense: ExpensePost, expenseReportId: number): Observable<string> {
+    const params = new HttpParams().set('expenseReportId', expenseReportId.toString());
+    return this.http.post<ApiResponse<string>>(this.apiUrl, expense, { params }).pipe(
       map(response => response.message)
     );
   }

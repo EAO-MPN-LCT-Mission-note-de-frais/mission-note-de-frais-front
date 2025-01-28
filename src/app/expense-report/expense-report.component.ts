@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 import {MissionSummaryComponent} from './mission-summary/mission-summary.component';
 import {ExpenseTableComponent} from './expense-table/expense-table.component';
 import {Status} from "../interfaces/status";
-import {Mission} from "../interfaces/mission";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -11,9 +10,10 @@ import {ExpenseService} from '@/app/services/expense.service';
 import {MatDialog} from '@angular/material/dialog';
 import {DeleteModalComponent} from '@/app/components/delete-modal/delete-modal.component';
 import {ExpenseReportService} from '@/app/services/expense-report.service';
-import { ErrorHandlerService } from '../utils/error-handler.service';
+import {ErrorHandlerService} from '../utils/error-handler.service';
 import {ExpenseCreateModalComponent} from '@/app/expense-report/expense-create-modal/expense-create-modal.component';
-import { Expense } from '../interfaces/expense';
+import {Expense} from '../interfaces/expense';
+import {MissionSummary} from '@/app/interfaces/mission';
 
 @Component({
   selector: 'app-expense-report',
@@ -29,9 +29,10 @@ export class ExpenseReportComponent implements OnInit {
   private errorHandlerService = inject(ErrorHandlerService);
   private dialog = inject(MatDialog);
 
+  expenseReportId = Number(this.route.snapshot.paramMap.get('id'));
   isDeleteDisabled: boolean = false;
 
-  mission = signal<Mission>({
+  mission = signal<MissionSummary>({
     id: 0,
     startDate: new Date(),
     endDate: new Date(),
@@ -53,12 +54,11 @@ export class ExpenseReportComponent implements OnInit {
 
   //TODO: à refaire sans le mock quand Mission service sera près
   loadExpenseReport() {
-    const expenseReportId = Number(this.route.snapshot.paramMap.get('id'));
-    if (!isNaN(expenseReportId)) {
-      this.expenseService.getExpensesByExpenseReportId(expenseReportId).subscribe({
+    if (!isNaN(this.expenseReportId)) {
+      this.expenseService.getExpensesByExpenseReportId(this.expenseReportId).subscribe({
         next: (expenses) => {
           if (expenses) {
-            const mockMission: Mission = {
+            const mockMission: MissionSummary = {
               id: 0,
               startDate: new Date(),
               endDate: new Date(),
@@ -67,9 +67,9 @@ export class ExpenseReportComponent implements OnInit {
               status: Status.INITIALE,
               transportIds: [],
               expenseReport: {
-                id: expenseReportId,
+                id: this.expenseReportId,
                 amount: expenses.reduce((sum, e) => sum + e.amount, 0),
-                status: Status.VALIDEE,
+                status: Status.INITIALE,
                 expenses: expenses
               }
             };
@@ -101,7 +101,16 @@ export class ExpenseReportComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log("Dépense ajoutée avec succès")
+        result.expenseReportId = this.expenseReportId;
+        this.expenseService.createExpense(result, this.expenseReportId).subscribe({
+          next: (message) => {
+            console.log(message);
+            this.onRefreshExpenses();
+          },
+          error: (error) => {
+            this.errorHandlerService.handleError(error, "Une erreur est survenue lors de l'ajout de la dépense'.");
+          }
+        });
       }
     })
   }
@@ -114,8 +123,17 @@ export class ExpenseReportComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log("Dépense modifiée avec succès");
-        this.onRefreshExpenses();
+        result.id = expense.id;
+        result.expenseReportId = this.expenseReportId;
+        this.expenseService.updateExpense(result).subscribe({
+          next: (message) => {
+            console.log(message);
+            this.onRefreshExpenses();
+          },
+          error: (error) => {
+            this.errorHandlerService.handleError(error, "Une erreur est survenue lors de la modification de la dépense'.");
+          }
+        });
       }
     });
   }
@@ -152,8 +170,7 @@ export class ExpenseReportComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result?.confirmed) {
-          const expenseReportId = this.mission().expenseReport.id;
-          this.expenseReportService.deleteExpenseReport(expenseReportId).subscribe({
+          this.expenseReportService.deleteExpenseReport(this.expenseReportId).subscribe({
             next: (message) => {
               console.log(message);
               this.router.navigate(['/missions']);
