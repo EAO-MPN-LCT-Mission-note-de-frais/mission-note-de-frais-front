@@ -2,7 +2,7 @@ import {Status} from './status';
 
 export interface MissionStatus {
   /**
-   * The unique identifier for the mission.
+   * The unique identifier for the status.
    */
   id: number;
 

@@ -1,13 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
-import {Mission} from '@/app/interfaces/mission';
+import {Mission, MissionSummary} from '@/app/interfaces/mission';
 import {MissionStatus} from '@/app/interfaces/mission-status';
 import {environment} from '@/environments/environment';
-
-export type MissionResponse = Omit<Mission, 'status'> & {
-  status: MissionStatus;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -17,21 +13,15 @@ export class MissionService {
   }
 
   getMissions = (): Observable<Mission[]> => {
-    return this.http.get<MissionResponse[]>(`${environment.apiURL}/missions`)
-      .pipe(
-        map((missions) => {
-          return missions.map((mission) => {
-            return {
-              ...mission,
-              status: mission.status.name
-            }
-          })
-        })
-      )
+    return this.http.get<Mission[]>(`${environment.apiURL}/missions`)
   }
 
   getMissionById = (id: number): Observable<Mission> => {
     return this.http.get<Mission>(`${environment.apiURL}/missions/${id}`)
+  }
+
+  getMissionSummaryById = (id: number): Observable<MissionSummary> => {
+    return this.http.get<MissionSummary>(`${environment.apiURL}/missions/${id}`)
   }
 
   createMission = (mission: Mission): Observable<Mission> => {

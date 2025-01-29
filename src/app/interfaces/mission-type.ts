@@ -41,10 +41,4 @@ export interface MissionType {
    * This is an optional field.
    */
   endDate?: string;
-
-  /**
-   * The list of mission IDs associated with this mission type, if applicable.
-   * This is an optional field.
-   */
-  missionIds?: number[];
 }

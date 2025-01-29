@@ -1,5 +1,5 @@
 import {Expense} from './expense';
-import {Status} from '@/app/interfaces/status';
+import {MissionStatus} from '@/app/interfaces/mission-status';
 
 export interface ExpenseReport {
   /**
@@ -15,7 +15,7 @@ export interface ExpenseReport {
   /**
    * The status of the expense report.
    */
-  status: Status;
+  status: MissionStatus;
 
   /**
    * The list of expenses associated with this expense report.
