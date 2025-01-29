@@ -1,0 +1,17 @@
+@use '@angular/material' as mat;
+
+:host {
+  @include mat.table-overrides((
+    background-color: white,
+    row-item-outline-color: rgba(0, 0, 0, 0.2),
+    header-headline-color: white
+  ));
+
+  .mat-mdc-table .mat-mdc-header-cell {
+    background: #3F51B5 !important;
+  }
+
+  ::ng-deep .mat-sort-header-arrow {
+    color: white !important;
+  }
+}

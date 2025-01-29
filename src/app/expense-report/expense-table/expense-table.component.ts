@@ -18,7 +18,7 @@ import {ErrorHandlerService} from '@/app/utils/error-handler.service';
   selector: 'app-expense-table',
   imports: [CommonModule, MatDialogModule, MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule, MatButtonModule, MatMenuModule],
   templateUrl: './expense-table.component.html',
-  styleUrl: './expense-table.component.css'
+  styleUrl: './expense-table.component.scss'
 })
 export class ExpenseTableComponent {
   private expenseService = inject(ExpenseService);
