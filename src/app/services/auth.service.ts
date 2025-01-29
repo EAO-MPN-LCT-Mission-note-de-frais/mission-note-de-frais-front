@@ -1,13 +1,22 @@
-import {Injectable} from '@angular/core';
-import {LoginResponse, LoginService} from './login.service';
-import {isEmpty} from 'lodash';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {Router} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { LoginResponse, LoginService } from './login.service';
+import { isEmpty } from 'lodash';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import {jwtDecode} from 'jwt-decode'; // Import correct de jwtDecode
 
 /**
  * Constant key used to store the authentication session token in session storage.
  */
 const SESSION_KEY = 'AUTH_SESSION_TOKEN';
+
+/**
+ * Interface pour représenter un token JWT décodé.
+ */
+interface DecodedToken {
+  role?: string; // Assure-toi que cette clé correspond bien à la structure du JWT envoyé par ton backend
+  [key: string]: any; // Permet d'inclure d'autres données du token si nécessaire
+}
 
 @Injectable({
   providedIn: 'root',
@@ -35,7 +44,7 @@ export class AuthService {
    */
   authenticate(email: string, password: string): void {
     this.loginService
-      .login({email, password})
+      .login({ email, password })
       .subscribe((response: LoginResponse) => {
         sessionStorage.setItem(SESSION_KEY, response.token);
         this.#authenticated.next(true);
@@ -68,4 +77,27 @@ export class AuthService {
   getToken(): string | null {
     return sessionStorage.getItem(SESSION_KEY);
   }
+
+  /**
+   * Récupère le rôle de l'utilisateur depuis le token JWT stocké.
+   *
+   * @returns Le rôle sous forme de chaîne de caractères, ou `null` si le rôle n'est pas trouvé.
+   */
+  getUserRole(): string[] | null {
+    const token = this.getToken();
+    
+    if (!token) {
+      console.warn('Aucun token trouvé en session.');
+      return null;
+    }
+  
+    try {
+      const decoded: any = jwtDecode(token);
+  
+      return decoded.roles || null;
+    } catch (error) {
+      console.error('Erreur lors du décodage du token', error);
+      return null;
+    }
+  }  
 }

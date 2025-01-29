@@ -13,6 +13,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MissionTypeModalComponent } from '@/app/mission-type/mission-type-modal/mission-type-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteModalComponent } from '../components/delete-modal/delete-modal.component';
+import { AuthService } from '@/app/services/auth.service'
 
 
 @Component({
@@ -38,17 +39,33 @@ export class MissionTypeComponent implements OnInit {
   dataSource = new MatTableDataSource<MissionType>();
   errorMessage = '';
   private dialog = inject(MatDialog);
+  isAdmin: boolean = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private missionTypeService: MissionTypeService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
     this.loadMissionTypes();
+    this.checkUserRole();
+
+    console.log('Rôle de l’utilisateur :', this.authService.getUserRole());
+
+    this.displayedColumns = ['label', 'isCharged', 'isBonus', 'tjm', 'bonusPercentage', 'startDate', 'endDate'];
+
+    if (this.isAdmin) {
+      this.displayedColumns.push('actions');
+    }
+  }
+
+  checkUserRole(): void {
+    const userRoles = this.authService.getUserRole();
+    this.isAdmin = userRoles ? userRoles.includes('ADMINISTRATOR') : false;
   }
 
   ngAfterViewInit(): void {
@@ -144,5 +161,4 @@ export class MissionTypeComponent implements OnInit {
       }
     });
   }
-
 }
