@@ -19,7 +19,7 @@ import {MissionSummary} from '@/app/interfaces/mission';
   selector: 'app-expense-report',
   imports: [CommonModule, MissionSummaryComponent, ExpenseTableComponent, MatIcon, MatButton, MatIconButton],
   templateUrl: './expense-report.component.html',
-  styleUrl: './expense-report.component.css'
+  styleUrl: './expense-report.component.scss'
 })
 export class ExpenseReportComponent implements OnInit {
   private expenseService = inject(ExpenseService);
