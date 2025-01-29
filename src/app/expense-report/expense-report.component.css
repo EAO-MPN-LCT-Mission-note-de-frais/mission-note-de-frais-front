@@ -18,6 +18,16 @@
 .title-bar {
   display: flex;
   align-items: center;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+.total {
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 .total-export-submit {
