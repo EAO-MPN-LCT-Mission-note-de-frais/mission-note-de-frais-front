@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, inject, Inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
   AbstractControl,
@@ -14,6 +14,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {Expense} from '@/app/interfaces/expense';
 import {MatOption, MatSelect} from '@angular/material/select';
+import {ExpenseType} from '@/app/interfaces/expense-type';
+import {ExpenseTypeService} from '@/app/services/expense-type.service';
 
 @Component({
   selector: 'app-expense-create-modal',
@@ -22,16 +24,17 @@ import {MatOption, MatSelect} from '@angular/material/select';
   styleUrl: './expense-create-modal.component.css'
 })
 export class ExpenseCreateModalComponent {
+  private fb = inject(FormBuilder);
+  private dialogRef = inject(MatDialogRef<ExpenseCreateModalComponent>);
+  private expenseTypeService = inject(ExpenseTypeService);
 
   expenseForm: FormGroup;
-  //TODO implement missionStartDate et expenseTypeOption
-  missionStartDate = new Date('2024-01-01');
-  expenseTypeOptions = ['Transport', 'Hotel', 'Repas', 'Divers'];
+  //TODO implement missionStartDate
+  missionStartDate : Date = new Date('2024-01-01');
+  expenseTypeOptions: ExpenseType[] = [];
 
   constructor(
-    private fb: FormBuilder,
-    private dialogRef: MatDialogRef<ExpenseCreateModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Expense | null,
+    @Inject(MAT_DIALOG_DATA) public data: Expense | null
   ) {
     this.expenseForm = this.fb.group({
       date: [data?.date || '', [Validators.required, this.notBeforeMissionValidator(this.missionStartDate)]],
@@ -39,6 +42,17 @@ export class ExpenseCreateModalComponent {
       description: [data?.description || ''],
       amount: [data?.amount || null, [Validators.required, this.strictlyPositiveValidator]],
       tax: [data?.tax ?? null, [Validators.min(0)]],
+    });
+  }
+
+  ngOnInit(): void {
+    this.expenseTypeService.getAllExpenseTypes().subscribe({
+      next: (types) => {
+        this.expenseTypeOptions = types;
+      },
+      error: (error) => {
+        console.error('Erreur lors de la récupération des natures de frais', error);
+      }
     });
   }
 

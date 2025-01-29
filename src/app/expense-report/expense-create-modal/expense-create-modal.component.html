@@ -19,8 +19,8 @@
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>Nature de frais</mat-label>
       <mat-select formControlName="expenseType">
-        <mat-option *ngFor="let type of expenseTypeOptions" [value]="type">
-          {{ type }}
+        <mat-option *ngFor="let type of expenseTypeOptions" [value]="type.name">
+          {{ type.name }}
         </mat-option>
       </mat-select>
       <mat-error *ngIf="expenseForm.get('expenseType')?.hasError('required')">
