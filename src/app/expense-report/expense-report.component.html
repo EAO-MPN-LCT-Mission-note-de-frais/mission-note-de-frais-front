@@ -1,45 +1,58 @@
-<div class="expense-report-container" *ngIf="mission(); else loading">
-  <div class="title-bar">
-    <button mat-icon-button (click)="returnHome()" aria-label="Retour à la page d'accueil">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <h1 style="display: inline-block;">Note de frais</h1>
+<section>
+
+    <div class="expense-report-container container max-w-[1200px] mx-auto" *ngIf="mission(); else loading">
+
+      <div class="title-bar">
+        <button mat-icon-button (click)="returnHome()" aria-label="Retour à la page d'accueil">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1 style="display: inline-block;">Note de frais</h1>
+      </div>
+
+      <!-- Affichage des informations de la mission -->
+      <div class="mission-summary">
+        <h2>Récapitulatif de la mission</h2>
+        <app-mission-summary [mission]="mission()"></app-mission-summary>
+      </div>
+
+      <!-- Tableau des dépenses -->
+      <div class="expense-table">
+
+        <div class="table-header">
+          <h2>Liste des dépenses</h2>
+          <button
+            *ngIf="mission().expenseReport.status === Status.INITIALE || mission().expenseReport.status === Status.REJETEE"
+            mat-raised-button class="circle-button"
+            (click)="openCreateModal()"
+            aria-label="Ajouter une dépense">
+              <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        <app-expense-table
+          [expenses]="mission().expenseReport.expenses"
+          [expenseReportStatus]="mission().expenseReport.status"
+          (refreshExpenses)="onRefreshExpenses()"
+          (editExpense)="openEditModal($event)"
+        ></app-expense-table>
+
+        <div class="total-export-submit">
+          <div class="total">
+            Total des dépenses : {{ mission().expenseReport.amount ? mission().expenseReport.amount : '-' }}  €
+          </div>
+          <div class="actions">
+            <button mat-raised-button (click)="export()">Exporter en PDF</button>
+            <button mat-raised-button (click)="submit()">Soumettre</button>
+            <button *ngIf="!isDeleteDisabled" mat-raised-button (click)="delete()">Supprimer</button>
+          </div>
+        </div>
+
+      </div>
+
   </div>
 
-  <!-- Affichage des informations de la mission -->
-  <h2>Récapitulatif de la mission</h2>
-  <app-mission-summary [mission]="mission()"></app-mission-summary>
+    <ng-template #loading>
+      <p>Chargement...</p>
+    </ng-template>
 
-  <!-- Tableau des dépenses -->
-  <div class="table-header">
-    <h2>Liste des dépenses</h2>
-    <button
-      *ngIf="mission().expenseReport.status === Status.INITIALE || mission().expenseReport.status === Status.REJETEE"
-      mat-icon-button
-      (click)="openCreateModal()"
-      aria-label="Ajouter une dépense">
-        <mat-icon>add</mat-icon>
-    </button>
-  </div>
-  <app-expense-table
-    [expenses]="mission().expenseReport.expenses"
-    [expenseReportStatus]="mission().expenseReport.status"
-    (refreshExpenses)="onRefreshExpenses()"
-    (editExpense)="openEditModal($event)"
-  ></app-expense-table>
-
-  <div class="total-export-submit">
-    <div class="total">
-      Total des dépenses : {{ mission().expenseReport.amount ? mission().expenseReport.amount : '-' }}  €
-    </div>
-    <div class="actions">
-      <button mat-raised-button (click)="export()">Exporter en PDF</button>
-      <button mat-raised-button (click)="submit()">Soumettre</button>
-      <button *ngIf="!isDeleteDisabled" mat-raised-button (click)="delete()">Supprimer</button>
-    </div>
-  </div>
-</div>
-
-<ng-template #loading>
-  <p>Chargement...</p>
-</ng-template>
+</section>

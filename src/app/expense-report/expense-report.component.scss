@@ -1,0 +1,90 @@
+@use '@angular/material' as mat;
+
+.expense-report-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.total-section {
+  margin-top: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin-left: 15px;
+  font-size: 2em;
+}
+
+h2 {
+  margin-bottom: 10px;
+  font-size: 1.5em;
+}
+
+.total {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 5px 10px;
+  border: 2px solid #3F51B5;
+  border-radius: 8px;
+}
+
+.total-export-submit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.total-export-submit .actions {
+  display: flex;
+  gap: 10px;
+}
+
+:host {
+  button {
+    background-color: #3F51B5 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+    min-width: 0 !important;
+  }
+
+  button:hover {
+    background-color: #1A237E !important;
+    transform: scale(1.05);
+  }
+
+  .circle-button {
+    width: 35px !important;
+    height: 35px !important;
+    padding: 0 !important;
+    margin-bottom: 10px;
+  }
+
+  .circle-button mat-icon {
+    font-size: 25px !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+.error-snackbar {
+  background-color: #f44336;
+  color: white;
+}
