@@ -7,6 +7,20 @@
     header-headline-color: white
   ));
 
+  .mat-mdc-table {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .mat-mdc-table .mat-mdc-header-cell,
+  .mat-mdc-table .mat-mdc-cell {
+    text-align: center !important;
+  }
+
+  ::ng-deep .mat-sort-header-container {
+    justify-content: center !important;
+  }
+
   .mat-mdc-table .mat-mdc-header-cell {
     background: #3F51B5 !important;
   }

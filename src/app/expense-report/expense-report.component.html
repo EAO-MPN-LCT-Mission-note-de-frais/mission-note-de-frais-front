@@ -22,7 +22,7 @@
           <h2>Liste des dépenses</h2>
           <button
             *ngIf="mission().expenseReport.status === Status.INITIALE || mission().expenseReport.status === Status.REJETEE"
-            mat-icon-button
+            mat-raised-button class="circle-button"
             (click)="openCreateModal()"
             aria-label="Ajouter une dépense">
               <mat-icon>add</mat-icon>
