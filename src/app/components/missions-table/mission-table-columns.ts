@@ -48,7 +48,8 @@ export const columns: TableColumns [] = [
     id: 'status',
     property: 'status',
     label: 'Status',
-    sortable: true
+    sortable: true,
+    formatter: (value: any) => value.name
   },
   {
     id: "expense-report",

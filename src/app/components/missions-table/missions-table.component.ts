@@ -32,7 +32,7 @@ export class MissionsTableComponent {
   }
 
 
-  async viewExpenseReport(expenseReportId: number) {
-    await this.router.navigate(['/expense-report', expenseReportId]);
+  async viewExpenseReport(missionId: number) {
+    await this.router.navigate(['/expense-report', missionId]);
   }
 }

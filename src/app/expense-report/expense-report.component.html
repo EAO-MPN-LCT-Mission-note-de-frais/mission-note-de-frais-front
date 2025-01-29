@@ -21,7 +21,7 @@
         <div class="table-header">
           <h2>Liste des dépenses</h2>
           <button
-            *ngIf="mission().expenseReport.status === Status.INITIALE || mission().expenseReport.status === Status.REJETEE"
+            *ngIf="mission().expenseReport.status.name === Status.INITIALE || mission().expenseReport.status.name === Status.REJETEE"
             mat-raised-button class="circle-button"
             (click)="openCreateModal()"
             aria-label="Ajouter une dépense">
@@ -31,7 +31,7 @@
 
         <app-expense-table
           [expenses]="mission().expenseReport.expenses"
-          [expenseReportStatus]="mission().expenseReport.status"
+          [expenseReportStatus]="mission().expenseReport.status.name"
           (refreshExpenses)="onRefreshExpenses()"
           (editExpense)="openEditModal($event)"
         ></app-expense-table>

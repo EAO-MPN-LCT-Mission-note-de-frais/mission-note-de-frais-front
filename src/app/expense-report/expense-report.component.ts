@@ -2,7 +2,6 @@ import {Component, inject, OnInit, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MissionSummaryComponent} from './mission-summary/mission-summary.component';
 import {ExpenseTableComponent} from './expense-table/expense-table.component';
-import {Status} from "../interfaces/status";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -14,6 +13,8 @@ import {ErrorHandlerService} from '../utils/error-handler.service';
 import {ExpenseCreateModalComponent} from '@/app/expense-report/expense-create-modal/expense-create-modal.component';
 import {Expense} from '../interfaces/expense';
 import {MissionSummary} from '@/app/interfaces/mission';
+import {MissionService} from '@/app/services/mission.service';
+import {Status} from '@/app/interfaces/status';
 
 @Component({
   selector: 'app-expense-report',
@@ -24,12 +25,12 @@ import {MissionSummary} from '@/app/interfaces/mission';
 export class ExpenseReportComponent implements OnInit {
   private expenseService = inject(ExpenseService);
   private expenseReportService = inject(ExpenseReportService)
+  private missionService = inject(MissionService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private errorHandlerService = inject(ErrorHandlerService);
   private dialog = inject(MatDialog);
 
-  expenseReportId = Number(this.route.snapshot.paramMap.get('id'));
   isDeleteDisabled: boolean = false;
 
   mission = signal<MissionSummary>({
@@ -38,13 +39,29 @@ export class ExpenseReportComponent implements OnInit {
     endDate: new Date(),
     startTown: '',
     endTown: '',
-    status: Status.INITIALE,
+    status: {
+      id: 0,
+      name: Status.INITIALE
+    },
     transportIds: [],
     expenseReport: {
       id: 0,
       amount: 0,
-      status: Status.INITIALE,
+      status: {
+        id: 0,
+        name: Status.INITIALE
+      },
       expenses: []
+    },
+    missionType: {
+      id: 0,
+      label: '',
+      isCharged: false,
+      isBonus: false,
+      averageDailyRate: 0,
+      bonusPercentage: 0,
+      startDate: '',
+      endDate: ''
     }
   });
 
@@ -52,39 +69,51 @@ export class ExpenseReportComponent implements OnInit {
     this.loadExpenseReport()
   }
 
-  //TODO: à refaire sans le mock quand Mission service sera près
   loadExpenseReport() {
-    if (!isNaN(this.expenseReportId)) {
-      this.expenseService.getExpensesByExpenseReportId(this.expenseReportId).subscribe({
-        next: (expenses) => {
-          if (expenses) {
-            const mockMission: MissionSummary = {
-              id: 0,
-              startDate: new Date(),
-              endDate: new Date(),
-              startTown: 'Placeholder',
-              endTown: 'Placeholder',
-              status: Status.INITIALE,
-              transportIds: [],
-              expenseReport: {
-                id: this.expenseReportId,
-                amount: expenses.reduce((sum, e) => sum + e.amount, 0),
-                status: Status.INITIALE,
-                expenses: expenses
-              }
-            };
-            this.mission.set(mockMission);
+    const missionId = Number(this.route.snapshot.paramMap.get('id'));
+    if (!isNaN(missionId)) {
+      this.missionService.getMissionSummaryById(missionId).subscribe({
+        next: (mission) => {
+          if (mission && mission.expenseReport) {
+            this.mission.set(mission);
+            console.log(JSON.stringify(mission));
+            this.loadExpense()
             this.isDeleteDisabled = !this.validateDelete();
           } else {
-            this.errorHandlerService.handleError("","Erreur lors de la récupération des dépenses.");
+            this.errorHandlerService.handleError("","Erreur lors de la récupération de la mission.");
+            this.router.navigate(['/missions']);
           }
         },
         error: (error) => {
-          this.errorHandlerService.handleError(error, "Erreur lors de la récupération de la note de frais.");
+          this.errorHandlerService.handleError(error, "Erreur lors de la récupération de la mission.");
+          this.router.navigate(['/missions']);
         }
       })
     }
   }
+
+  loadExpense() {
+    const expenseReportId = this.mission().expenseReport.id;
+    if (expenseReportId) {
+      this.expenseService.getExpensesByExpenseReportId(expenseReportId).subscribe({
+        next: (expenses) => {
+          if (expenses) {
+            this.mission.update((mission) => ({
+              ...mission,
+              expenseReport: {
+                ...mission.expenseReport,
+                expenses: expenses
+              }
+            }));
+          }
+        },
+        error: (error) => {
+          this.errorHandlerService.handleError(error, "Erreur lors de la récupération des dépenses.");
+        }
+      });
+    }
+  }
+
   onRefreshExpenses() {
     this.loadExpenseReport();
   }
@@ -101,8 +130,8 @@ export class ExpenseReportComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        result.expenseReportId = this.expenseReportId;
-        this.expenseService.createExpense(result, this.expenseReportId).subscribe({
+        result.expenseReportId = this.mission().expenseReport.id;
+        this.expenseService.createExpense(result, this.mission().expenseReport.id).subscribe({
           next: (message) => {
             console.log(message);
             this.onRefreshExpenses();
@@ -124,7 +153,7 @@ export class ExpenseReportComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         result.id = expense.id;
-        result.expenseReportId = this.expenseReportId;
+        result.expenseReportId = this.mission().expenseReport.id;
         this.expenseService.updateExpense(result).subscribe({
           next: (message) => {
             console.log(message);
@@ -152,7 +181,7 @@ export class ExpenseReportComponent implements OnInit {
   }
 
   validateDelete(): boolean {
-    const expenseReportStatus = this.mission().expenseReport.status;
+    const expenseReportStatus = this.mission().expenseReport.status.name;
     return expenseReportStatus == Status.INITIALE || expenseReportStatus == Status.REJETEE;
   }
 
@@ -170,7 +199,7 @@ export class ExpenseReportComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result?.confirmed) {
-          this.expenseReportService.deleteExpenseReport(this.expenseReportId).subscribe({
+          this.expenseReportService.deleteExpenseReport(this.mission().expenseReport.id).subscribe({
             next: (message) => {
               console.log(message);
               this.router.navigate(['/missions']);

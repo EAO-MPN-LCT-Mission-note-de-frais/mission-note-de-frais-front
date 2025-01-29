@@ -36,7 +36,7 @@
       </button>
       <mat-menu #menu="matMenu">
         @if (mission.expenseReport){
-          <button mat-menu-item (click)="viewExpenseReport(mission.expenseReport.id)">Note de frais</button>
+          <button mat-menu-item (click)="viewExpenseReport(mission.id)">Note de frais</button>
         }
         <button mat-menu-item>Modifier</button>
         <button mat-menu-item>Supprimer</button>

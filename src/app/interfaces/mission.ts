@@ -1,5 +1,6 @@
 import {ExpenseReport} from './expense-report';
-import {Status} from '@/app/interfaces/status';
+import {MissionStatus} from '@/app/interfaces/mission-status';
+import {MissionType} from '@/app/interfaces/mission-type';
 
 export interface Mission {
   /**
@@ -30,7 +31,7 @@ export interface Mission {
   /**
    * The current status of the mission.
    */
-  status: Status;
+  status: MissionStatus;
 
   /**
    * The transports of the mission
@@ -41,8 +42,14 @@ export interface Mission {
    * The expense report of the mission
    */
   expenseReport?: ExpenseReport;
+
+  /**
+   * The type of the mission
+   */
+  missionType: MissionType;
 }
 
 export interface MissionPost extends Omit<Mission, 'id'> {}
 export type MissionSummary = Omit<Mission, "expenseReport"> & {  expenseReport: ExpenseReport}
+
 
