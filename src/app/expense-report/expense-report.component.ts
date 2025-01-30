@@ -81,12 +81,12 @@ export class ExpenseReportComponent implements OnInit {
             this.isDeleteDisabled = !this.validateDelete();
           } else {
             this.errorHandlerService.handleError("","Erreur lors de la récupération de la mission.");
-            this.router.navigate(['/missions']);
+            this.returnHome()
           }
         },
         error: (error) => {
           this.errorHandlerService.handleError(error, "Erreur lors de la récupération de la mission.");
-          this.router.navigate(['/missions']);
+          this.returnHome()
         }
       })
     }
@@ -168,7 +168,28 @@ export class ExpenseReportComponent implements OnInit {
   }
 
   export() {
-    console.log('export');
+    const expenseReportId = this.mission().expenseReport.id;
+    const startDate = this.mission().startDate;
+    const endDate = this.mission().endDate
+    const startTown = this.mission().startTown;
+    const endTown = this.mission().endTown;
+    if (expenseReportId) {
+      this.expenseReportService.exportExpenseReportToPdf(expenseReportId).subscribe({
+        next: (pdfBlob) => {
+          const url = window.URL.createObjectURL(pdfBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Note de frais - ${startTown} (${startDate}) - ${endTown} (${endDate}).pdf`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        },
+        error: (error) => {
+          this.errorHandlerService.handleError(error, "Une erreur est survenue lors de l'exportation du PDF.");
+        }
+      });
+    }
   }
 
   //TODO - logique à développer :
