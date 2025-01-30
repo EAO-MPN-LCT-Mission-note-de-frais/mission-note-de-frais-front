@@ -15,6 +15,9 @@ import {Expense} from '../interfaces/expense';
 import {MissionSummary} from '@/app/interfaces/mission';
 import {MissionService} from '@/app/services/mission.service';
 import {Status} from '@/app/interfaces/status';
+import {AuthService} from '@/app/services/auth.service';
+import {MissionStatus} from '@/app/interfaces/mission-status';
+import {StatusMappingService} from '@/app/utils/status-mapping.service';
 
 @Component({
   selector: 'app-expense-report',
@@ -26,12 +29,22 @@ export class ExpenseReportComponent implements OnInit {
   private expenseService = inject(ExpenseService);
   private expenseReportService = inject(ExpenseReportService)
   private missionService = inject(MissionService);
+  private authService = inject(AuthService);
+  private errorHandlerService = inject(ErrorHandlerService);
+  private statusMappingService = inject(StatusMappingService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private errorHandlerService = inject(ErrorHandlerService);
   private dialog = inject(MatDialog);
 
-  isDeleteDisabled: boolean = false;
+  expenseReportId: number = 0;
+  expenseReportStatus: MissionStatus = {
+    id: 0,
+    name: Status.INITIALE
+  }
+  isManager: boolean = false;
+  isEnAttente: boolean = false;
+  isInitialOrRejected: boolean = true;
+
 
   mission = signal<MissionSummary>({
     id: 0,
@@ -39,18 +52,12 @@ export class ExpenseReportComponent implements OnInit {
     endDate: new Date(),
     startTown: '',
     endTown: '',
-    status: {
-      id: 0,
-      name: Status.INITIALE
-    },
+    status: this.expenseReportStatus,
     transportIds: [],
     expenseReport: {
       id: 0,
       amount: 0,
-      status: {
-        id: 0,
-        name: Status.INITIALE
-      },
+      status: this.expenseReportStatus,
       expenses: []
     },
     missionType: {
@@ -66,7 +73,13 @@ export class ExpenseReportComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.checkUserRole();
     this.loadExpenseReport()
+  }
+
+  checkUserRole(): void {
+    const userRoles = this.authService.getUserRole();
+    this.isManager = userRoles ? userRoles.includes('MANAGER') : false;
   }
 
   loadExpenseReport() {
@@ -76,9 +89,11 @@ export class ExpenseReportComponent implements OnInit {
         next: (mission) => {
           if (mission && mission.expenseReport) {
             this.mission.set(mission);
-            console.log(JSON.stringify(mission));
+            this.expenseReportId = this.mission().expenseReport.id;
+            this.expenseReportStatus = this.mission().expenseReport.status;
+            this.isEnAttente = this.expenseReportStatus.name === Status.EN_ATTENTE_VALIDATION;
+            this.isInitialOrRejected = this.expenseReportStatus.name === Status.INITIALE || this.expenseReportStatus.name === Status.REJETEE;
             this.loadExpense()
-            this.isDeleteDisabled = !this.validateDelete();
           } else {
             this.errorHandlerService.handleError("","Erreur lors de la récupération de la mission.");
             this.returnHome()
@@ -93,9 +108,8 @@ export class ExpenseReportComponent implements OnInit {
   }
 
   loadExpense() {
-    const expenseReportId = this.mission().expenseReport.id;
-    if (expenseReportId) {
-      this.expenseService.getExpensesByExpenseReportId(expenseReportId).subscribe({
+    if (this.expenseReportId) {
+      this.expenseService.getExpensesByExpenseReportId(this.expenseReportId).subscribe({
         next: (expenses) => {
           if (expenses) {
             this.mission.update((mission) => ({
@@ -130,8 +144,7 @@ export class ExpenseReportComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        result.expenseReportId = this.mission().expenseReport.id;
-        this.expenseService.createExpense(result, this.mission().expenseReport.id).subscribe({
+        this.expenseService.createExpense(result, this.expenseReportId).subscribe({
           next: (message) => {
             console.log(message);
             this.onRefreshExpenses();
@@ -152,8 +165,7 @@ export class ExpenseReportComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        result.id = expense.id;
-        result.expenseReportId = this.mission().expenseReport.id;
+        result.expenseReportId = this.expenseReportId
         this.expenseService.updateExpense(result).subscribe({
           next: (message) => {
             console.log(message);
@@ -168,13 +180,12 @@ export class ExpenseReportComponent implements OnInit {
   }
 
   export() {
-    const expenseReportId = this.mission().expenseReport.id;
     const startDate = this.mission().startDate;
     const endDate = this.mission().endDate
     const startTown = this.mission().startTown;
     const endTown = this.mission().endTown;
-    if (expenseReportId) {
-      this.expenseReportService.exportExpenseReportToPdf(expenseReportId).subscribe({
+    if (this.expenseReportId) {
+      this.expenseReportService.exportExpenseReportToPdf(this.expenseReportId).subscribe({
         next: (pdfBlob) => {
           const url = window.URL.createObjectURL(pdfBlob);
           const a = document.createElement('a');
@@ -192,22 +203,130 @@ export class ExpenseReportComponent implements OnInit {
     }
   }
 
-  //TODO - logique à développer :
-  // Soumettre si INITIALE ou REJETEE
-  // Annuler la soumission si EN ATTENTE VALIDATION
-  // Pas de bouton si VALIDEE OU ANNULEE
   submit() {
-    console.log('submit');
-    this.isDeleteDisabled = !this.validateDelete();
+    if (this.isInitialOrRejected) {
+      const statusId = this.statusMappingService.getStatusIdByName(Status.EN_ATTENTE_VALIDATION);
+      this.mission.update((mission) => ({
+        ...mission,
+        expenseReport: {
+          ...mission.expenseReport,
+          status: {
+            ...mission.expenseReport.status,
+            id: statusId,
+            name: Status.EN_ATTENTE_VALIDATION
+          }
+        }
+      }));
+      this.expenseReportService.updateExpenseReport(this.mission().expenseReport).subscribe({
+        next: (message) => {
+          console.log(message);
+          this.loadExpenseReport();
+        },
+        error: (error) => {
+          this.errorHandlerService.handleError(error, "Une erreur est survenue lors de la soumission de la note de frais.");
+          this.loadExpenseReport();
+        }
+      });
+    } else {
+      console.log('Le statut de la note de frais ne permet pas la soumission.');
+    }
   }
 
-  validateDelete(): boolean {
-    const expenseReportStatus = this.mission().expenseReport.status.name;
-    return expenseReportStatus == Status.INITIALE || expenseReportStatus == Status.REJETEE;
+  cancelSubmission() {
+    if (this.isEnAttente) {
+      const statusId = this.statusMappingService.getStatusIdByName(Status.INITIALE);
+      this.mission.update((mission) => ({
+        ...mission,
+        expenseReport: {
+          ...mission.expenseReport,
+          status: {
+            ...mission.expenseReport.status,
+            id: statusId,
+            name: Status.INITIALE
+          }
+        }
+      }));
+      this.expenseReportService.updateExpenseReport(this.mission().expenseReport).subscribe({
+        next: (message) => {
+          console.log(message);
+          this.loadExpenseReport();
+        },
+        error: (error) => {
+          this.errorHandlerService.handleError(error, "Une erreur est survenue lors de l'annulation de la soumission de la note de frais.");
+          this.loadExpenseReport();
+        }
+      });
+    } else {
+      console.log('Le statut de la note de frais ne permet pas l\'annulation de la soumission.');
+    }
+  }
+
+  validateSubmission() {
+    if (this.isManager && this.isEnAttente) {
+      const statusId = this.statusMappingService.getStatusIdByName(Status.VALIDEE);
+      this.mission.update((mission) => ({
+        ...mission,
+        expenseReport: {
+          ...mission.expenseReport,
+          status: {
+            ...mission.expenseReport.status,
+            id: statusId,
+            name: Status.VALIDEE
+          }
+        }
+      }));
+      this.expenseReportService.updateExpenseReport(this.mission().expenseReport).subscribe({
+        next: (message) => {
+          console.log(message);
+          this.loadExpenseReport();
+        },
+        error: (error) => {
+          this.errorHandlerService.handleError(error, "Une erreur est survenue lors de la validation de la note de frais.");
+          this.loadExpenseReport();
+        }
+      });
+    } else {
+      if (!this.isManager) {
+        console.log('Vous devez être manager peut valider une note de frais.');
+      }
+      console.log('Le statut de la note de frais ne permet pas la validation');
+    }
+  }
+
+  rejectSubmission() {
+    if (this.isManager && this.isEnAttente) {
+      const statusId = this.statusMappingService.getStatusIdByName(Status.REJETEE);
+      this.mission.update((mission) => ({
+        ...mission,
+        expenseReport: {
+          ...mission.expenseReport,
+          status: {
+            ...mission.expenseReport.status,
+            id: statusId,
+            name: Status.REJETEE
+          }
+        }
+      }));
+      this.expenseReportService.updateExpenseReport(this.mission().expenseReport).subscribe({
+        next: (message) => {
+          console.log(message);
+          this.loadExpenseReport();
+        },
+        error: (error) => {
+          this.errorHandlerService.handleError(error, "Une erreur est survenue lors du rejet de la note de frais.");
+          this.loadExpenseReport();
+        }
+      });
+    } else {
+      if (!this.isManager) {
+        console.log('Vous devez être manager pour rejeter une note de frais.');
+      }
+      console.log('Le statut de la note de frais ne permet pas le rejet.');
+    }
   }
 
   delete() {
-    if (this.validateDelete()) {
+    if (this.isInitialOrRejected) {
       const dialogRef = this.dialog.open(DeleteModalComponent, {
         width: '600px',
         data: {
@@ -220,7 +339,7 @@ export class ExpenseReportComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result?.confirmed) {
-          this.expenseReportService.deleteExpenseReport(this.mission().expenseReport.id).subscribe({
+          this.expenseReportService.deleteExpenseReport(this.expenseReportId).subscribe({
             next: (message) => {
               console.log(message);
               this.router.navigate(['/missions']);
