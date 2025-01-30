@@ -57,17 +57,19 @@ export class MissionTypeModalComponent {
   updateValidation(): void {
     const isCharged = this.form.get('isCharged')?.value;
     const isBonus = this.form.get('isBonus')?.value;
-
+  
     if (isCharged) {
       this.form.get('averageDailyRate')?.setValidators([Validators.required, Validators.min(0)]);
     } else {
+      this.form.get('averageDailyRate')?.setValue(null); // 🔥 Efface la valeur
       this.form.get('averageDailyRate')?.clearValidators();
     }
     this.form.get('averageDailyRate')?.updateValueAndValidity();
-
+  
     if (isBonus) {
       this.form.get('bonusPercentage')?.setValidators([Validators.required, Validators.min(0)]);
     } else {
+      this.form.get('bonusPercentage')?.setValue(null); // 🔥 Efface la valeur
       this.form.get('bonusPercentage')?.clearValidators();
     }
     this.form.get('bonusPercentage')?.updateValueAndValidity();
