@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {MissionSummaryComponent} from './mission-summary/mission-summary.component';
 import {ExpenseTableComponent} from './expense-table/expense-table.component';
 import {MatIcon} from "@angular/material/icon";
-import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ExpenseService} from '@/app/services/expense.service';
 import {MatDialog} from '@angular/material/dialog';
@@ -21,7 +21,7 @@ import {StatusMappingService} from '@/app/utils/status-mapping.service';
 
 @Component({
   selector: 'app-expense-report',
-  imports: [CommonModule, MissionSummaryComponent, ExpenseTableComponent, MatIcon, MatButton, MatIconButton],
+  imports: [CommonModule, MissionSummaryComponent, ExpenseTableComponent, MatIcon, MatButton, MatIconButton, MatMiniFabButton],
   templateUrl: './expense-report.component.html',
   styleUrl: './expense-report.component.scss'
 })

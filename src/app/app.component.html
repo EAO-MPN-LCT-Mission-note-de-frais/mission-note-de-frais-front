@@ -1,24 +1,5 @@
-
 <main class="main">
-  <nav>
-    <ul>
-      @if (isAuthenticated()) {
-        <li>
-          <a routerLink="/mission-type">Nature de mission</a>
-        </li>
-        <li>
-          <a routerLink="/missions">Missions</a>
-        </li>
-        <li>
-          <a (click)="logout()">Déconnecter</a>
-        </li>
-      } @else {
-        <li>
-          <a routerLink="/auth/login">Connexion</a>
-        </li>
-      }
-    </ul>
-  </nav>
+  <router-outlet></router-outlet>
 </main>
 
-<router-outlet />
+

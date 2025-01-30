@@ -40,7 +40,7 @@ export class LoginComponent {
         console.log('Authentifier avec succès.');
       },
       error: (error) => {
-        this.errorHandlerService.handleError(error, "Le mot de passe est ou l'email est inconnu.");
+        this.errorHandlerService.handleError(error, "Le mot de passe est incorrect ou l'email est inconnu.");
       }
     });
   }

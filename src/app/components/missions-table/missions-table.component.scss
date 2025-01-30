@@ -12,6 +12,11 @@
     background: #3F51B5 !important;
   }
 
+  .mat-mdc-table {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
   ::ng-deep .mat-sort-header-arrow {
     color: white !important;
   }
