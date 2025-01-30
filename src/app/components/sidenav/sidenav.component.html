@@ -1,0 +1,7 @@
+<button mat-icon-button [matMenuTriggerFor]="menu">
+  <mat-icon>menu</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <a mat-menu-item routerLink="/mission-type">Nature de mission</a>
+  <button mat-menu-item (click)="logout()">Se déconnecter</button>
+</mat-menu>

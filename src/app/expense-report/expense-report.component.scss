@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 
 .expense-report-container {
+  margin-top: 20px;
   padding: 20px;
   font-family: Arial, sans-serif;
 }
@@ -67,21 +68,10 @@ h2 {
     background-color: #1A237E !important;
     transform: scale(1.05);
   }
+}
 
-  .circle-button {
-    width: 35px !important;
-    height: 35px !important;
-    padding: 0 !important;
-    margin-bottom: 10px;
-  }
-
-  .circle-button mat-icon {
-    font-size: 25px !important;
-    margin: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
+.table-header button {
+  margin-bottom: 10px;
 }
 
 .error-snackbar {

@@ -1,11 +1,10 @@
-import {Component, input, signal} from '@angular/core';
-import {Router, RouterLink, RouterOutlet} from '@angular/router';
+import {Component, signal} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
 import {AuthService} from './services/auth.service';
-import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -14,13 +13,9 @@ export class AppComponent {
 
   isAuthenticated = signal(false);
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService) {
     this.authService.authenticated.subscribe((isAuthenticated) => {
       this.isAuthenticated.set(isAuthenticated);
     });
-  }
-
-  logout(): void {
-    this.authService.logout();
   }
 }

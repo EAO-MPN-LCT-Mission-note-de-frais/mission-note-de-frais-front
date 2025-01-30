@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LoginResponse, LoginService } from './login.service';
 import { isEmpty } from 'lodash';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {BehaviorSubject, catchError, Observable, tap, throwError} from 'rxjs';
 import { Router } from '@angular/router';
 import {jwtDecode} from 'jwt-decode'; // Import correct de jwtDecode
 
@@ -9,14 +9,6 @@ import {jwtDecode} from 'jwt-decode'; // Import correct de jwtDecode
  * Constant key used to store the authentication session token in session storage.
  */
 const SESSION_KEY = 'AUTH_SESSION_TOKEN';
-
-/**
- * Interface pour représenter un token JWT décodé.
- */
-interface DecodedToken {
-  role?: string; // Assure-toi que cette clé correspond bien à la structure du JWT envoyé par ton backend
-  [key: string]: any; // Permet d'inclure d'autres données du token si nécessaire
-}
 
 @Injectable({
   providedIn: 'root',
@@ -42,14 +34,18 @@ export class AuthService {
    * @param email - The user's email address.
    * @param password - The user's password.
    */
-  authenticate(email: string, password: string): void {
-    this.loginService
-      .login({ email, password })
-      .subscribe((response: LoginResponse) => {
+  authenticate(email: string, password: string): Observable<LoginResponse> {
+    return this.loginService.login({ email, password }).pipe(
+      tap((response: LoginResponse) => {
         sessionStorage.setItem(SESSION_KEY, response.token);
         this.#authenticated.next(true);
         this.router.navigate(['/']);
-      });
+      }),
+      catchError((error) => {
+        this.#authenticated.next(false);
+        return throwError(() => error)
+      })
+    );
   }
 
   /**
@@ -67,6 +63,7 @@ export class AuthService {
   logout(): void {
     sessionStorage.removeItem(SESSION_KEY);
     this.#authenticated.next(false);
+    this.router.navigate(['/auth/login']);
   }
 
   /**
@@ -85,19 +82,19 @@ export class AuthService {
    */
   getUserRole(): string[] | null {
     const token = this.getToken();
-    
+
     if (!token) {
       console.warn('Aucun token trouvé en session.');
       return null;
     }
-  
+
     try {
       const decoded: any = jwtDecode(token);
-  
+
       return decoded.roles || null;
     } catch (error) {
       console.error('Erreur lors du décodage du token', error);
       return null;
     }
-  }  
+  }
 }
