@@ -23,5 +23,4 @@ export class TransportService {
   createTransport(transport: { name: string }): Observable<Transport> {
     return this.http.post<Transport>(this.apiUrl, transport);
   }
-  
 }
