@@ -1,8 +1,12 @@
 <section>
     <div class="container mx-auto">
         <div class=" w-[480px] mx-auto">
+
             <form (submit)="onSubmit($event)">
                 <div class="flex flex-col relative shadow-md bg-[#eee] p-6 my-12">
+
+                    <h1 class="title">Connexion</h1>
+
                     <mat-form-field>
                         <mat-label>Email</mat-label>
                         <input matInput [formControl]="email">
@@ -12,14 +16,14 @@
                     </mat-form-field>
 
                     <mat-form-field>
-                        <mat-label>Mode de passe</mat-label>
-                        <input matInput [formControl]="password">
+                        <mat-label>Mot de passe</mat-label>
+                        <input matInput [formControl]="password" type="password">
                         @if (email.hasError('required')) {
                         <mat-error>Le mot de passe est requis</mat-error>
                         }
                     </mat-form-field>
 
-                    <button mat-flat-button>Se connecter</button>
+                    <button mat-flat-button class="login-button">Se connecter</button>
                 </div>
             </form>
         </div>
