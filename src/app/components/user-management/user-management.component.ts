@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '@/app/services/user.service';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 
 interface User {
   firstName: string;
@@ -13,7 +15,7 @@ interface User {
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [CommonModule, MatTableModule],
+  imports: [CommonModule, MatTableModule, MatCheckboxModule],
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css']
 })
