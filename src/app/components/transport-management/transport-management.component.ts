@@ -31,7 +31,7 @@ export class TransportManagementComponent implements OnInit {
 
   addTransport(): void {
     if (!this.newTransport.trim()) return;
-    this.transportService.createTransport(this.newTransport).subscribe(() => {
+    this.transportService.createTransport({ name: this.newTransport }).subscribe(() => {
       this.loadTransports();
       this.newTransport = '';
     });
