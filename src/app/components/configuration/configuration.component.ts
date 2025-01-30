@@ -6,8 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 
 import { UserManagementComponent } from '../user-management/user-management.component';
-import { TransportManagementComponent } from '../transport-management/transport-management.component';
-import { ExpenseTypeManagementComponent } from '../expense-type-management/expense-type-management.component';
 
 import { TransportService } from '@/app/services/transport.service';
 import { ExpenseTypeService } from '@/app/services/expense-type.service';

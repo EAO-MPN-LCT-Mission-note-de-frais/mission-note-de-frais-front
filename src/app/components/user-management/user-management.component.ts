@@ -17,7 +17,7 @@ interface User {
   standalone: true,
   imports: [CommonModule, MatTableModule, MatCheckboxModule],
   templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.css']
+  styleUrls: ['./user-management.component.scss']
 })
 export class UserManagementComponent implements OnInit {
   users: User[] = [];

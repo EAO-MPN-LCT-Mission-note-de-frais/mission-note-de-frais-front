@@ -11,14 +11,15 @@
   <app-user-management></app-user-management>
 
   <h2>Gestion des types de transport</h2>
-  <button mat-raised-button color="primary" (click)="openModal('Transport')">Ajouter un Transport</button>
   <div class="tags-container">
     <span class="tag" *ngFor="let transport of transports">{{ transport.name }}</span>
+    <button mat-raised-button color="primary" class="circle-button" (click)="openModal('Transport')">+</button>
   </div>
 
   <h2>Gestion des natures de frais</h2>
-  <button mat-raised-button color="primary" (click)="openModal('ExpenseType')">Ajouter une Nature de Frais</button>
   <div class="tags-container">
     <span class="tag" *ngFor="let expenseType of expenseTypes">{{ expenseType.name }}</span>
+    <button mat-raised-button color="primary" class="circle-button" (click)="openModal('ExpenseType')">+</button>
   </div>
+
 </div>
