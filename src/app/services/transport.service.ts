@@ -20,7 +20,8 @@ export class TransportService {
     return this.http.get<Transport[]>(this.apiUrl);
   }
 
-  createTransport(name: string): Observable<Transport> {
-    return this.http.post<Transport>(this.apiUrl, { name });
+  createTransport(transport: { name: string }): Observable<Transport> {
+    return this.http.post<Transport>(this.apiUrl, transport);
   }
+  
 }

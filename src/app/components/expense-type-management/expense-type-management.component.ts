@@ -31,7 +31,7 @@ export class ExpenseTypeManagementComponent implements OnInit {
 
   addExpenseType(): void {
     if (!this.newExpenseType.trim()) return;
-    this.expenseTypeService.createExpenseType(this.newExpenseType).subscribe(() => {
+    this.expenseTypeService.createExpenseType({ name: this.newExpenseType }).subscribe(() => {
       this.loadExpenseTypes();
       this.newExpenseType = '';
     });

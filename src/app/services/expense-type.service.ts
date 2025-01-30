@@ -20,7 +20,8 @@ export class ExpenseTypeService {
     return this.http.get<ExpenseType[]>(this.apiUrl);
   }
 
-  createExpenseType(name: string): Observable<ExpenseType> {
-    return this.http.post<ExpenseType>(this.apiUrl, { name });
+  createExpenseType(expenseType: { name: string }): Observable<ExpenseType> {
+    return this.http.post<ExpenseType>(this.apiUrl, expenseType);
   }
+  
 }

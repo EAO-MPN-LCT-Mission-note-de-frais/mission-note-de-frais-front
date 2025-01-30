@@ -1,15 +1,24 @@
 <div class="configuration-container">
-    <!-- Bouton de retour -->
-    <div class="title-bar">
-      <button mat-icon-button (click)="returnHome()" aria-label="Retour à la page d'accueil">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      <h1>Configuration</h1>
-    </div>
-  
-    <!-- Sections -->
-    <app-user-management></app-user-management>
-    <app-transport-management></app-transport-management>
-    <app-expense-type-management></app-expense-type-management>
+  <!-- Bouton de retour -->
+  <div class="title-bar">
+    <button mat-icon-button (click)="returnHome()" aria-label="Retour à la page d'accueil">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Configuration</h1>
   </div>
-  
+
+  <!-- Sections -->
+  <app-user-management></app-user-management>
+
+  <h2>Gestion des types de transport</h2>
+  <button mat-raised-button color="primary" (click)="openModal('Transport')">Ajouter un Transport</button>
+  <div class="tags-container">
+    <span class="tag" *ngFor="let transport of transports">{{ transport.name }}</span>
+  </div>
+
+  <h2>Gestion des natures de frais</h2>
+  <button mat-raised-button color="primary" (click)="openModal('ExpenseType')">Ajouter une Nature de Frais</button>
+  <div class="tags-container">
+    <span class="tag" *ngFor="let expenseType of expenseTypes">{{ expenseType.name }}</span>
+  </div>
+</div>
