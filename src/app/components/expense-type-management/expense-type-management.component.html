@@ -1,0 +1,12 @@
+<h2>Gestion des natures de frais</h2>
+
+<!-- Champ d'ajout d'une nouvelle nature de frais -->
+<div class="input-container">
+    <input matInput [(ngModel)]="newExpenseType" placeholder="Ajouter une nature de frais">
+    <button mat-button color="primary" (click)="addExpenseType()">Ajouter</button>
+</div>
+
+<!-- Liste des natures de frais sous forme de tags -->
+<div class="tags-container">
+    <span class="tag" *ngFor="let expense of expenseTypes">{{ expense.name }}</span>
+</div>

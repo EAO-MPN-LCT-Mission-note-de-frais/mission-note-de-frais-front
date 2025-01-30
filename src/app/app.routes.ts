@@ -1,10 +1,11 @@
-import {Routes} from '@angular/router';
-import {MissionsComponent} from './missions/missions.component';
-import {AuthGuard} from './guards/auth.guard';
-import {LoginComponent} from './login/login.component';
-import {ExpenseReportComponent} from './expense-report/expense-report.component';
-import {MissionTypeComponent} from './mission-type/mission-type.component';
-import {LoginGuard} from './guards/login.guard';
+import { Routes } from '@angular/router';
+import { MissionsComponent } from './missions/missions.component';
+import { AuthGuard } from './guards/auth.guard';
+import { LoginComponent } from './login/login.component';
+import { ExpenseReportComponent } from './expense-report/expense-report.component';
+import { MissionTypeComponent } from './mission-type/mission-type.component';
+import { LoginGuard } from './guards/login.guard';
+import { ConfigurationComponent } from './components/configuration/configuration.component';
 
 export const routes: Routes = [
   {
@@ -32,4 +33,9 @@ export const routes: Routes = [
     component: MissionTypeComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'configuration',
+    component: ConfigurationComponent,
+    canActivate: [AuthGuard] 
+  }
 ];
