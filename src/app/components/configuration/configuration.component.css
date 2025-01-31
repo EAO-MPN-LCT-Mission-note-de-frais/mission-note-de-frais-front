@@ -5,38 +5,38 @@
 
 .title-bar {
     display: flex;
-    align-items: center; /* ✅ Alignement parfait du bouton et du titre */
-    gap: 10px; /* ✅ Ajoute un petit espacement entre le bouton et le titre */
+    align-items: center;
+    gap: 10px;
     margin : 20px;
 }
 
 .title-bar button {
-    width: 42px; /* ✅ Ajustement pour un rendu net */
+    width: 42px;
     height: 42px;
     min-width: 42px;
     min-height: 42px;
-    border-radius: 50%; /* ✅ Rend bien rond */
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #000000; /* ✅ Bordure bleue */
-    color: #000000; /* ✅ Couleur de l'icône */
-    background-color: white; /* ✅ Fond blanc */
+    border: 2px solid #000000;
+    color: #000000;
+    background-color: white;
     transition: all 0.2s ease-in-out;
-    box-shadow: 0 0 2px rgba(25, 118, 210, 0.8); /* ✅ Supprime l'effet pixelisé */
+    box-shadow: 0 0 2px rgba(25, 118, 210, 0.8);
     margin-right: 20px;
 }
 
 .title-bar button:hover {
-    background-color: #1976d2; /* ✅ Fond bleu au survol */
-    color: white; /* ✅ Icône blanche au survol */
+    background-color: #1976d2;
+    color: white;
     border-color: #1976d2;
-    box-shadow: 0 0 6px rgba(25, 118, 210, 0.6); /* ✅ Effet lissé au survol */
+    box-shadow: 0 0 6px rgba(25, 118, 210, 0.6);
 }
 
 h1 {
-    margin: 0; /* ✅ Supprime tout décalage éventuel */
-    line-height: 42px; /* ✅ Ajuste la hauteur du texte pour être bien aligné */
+    margin: 0;
+    line-height: 42px;
 }
 
 h2 {
@@ -79,15 +79,12 @@ input {
     font-size: 24px;
     font-weight: bold;
     color: #1976d2;
-    /* Bleu initial */
     background-color: white;
-    /* Fond blanc initial */
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
     border: 2px solid #1976d2;
-    /* Bordure bleue */
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     line-height: 40px;
@@ -96,13 +93,9 @@ input {
 
 .circle-button:hover {
     background-color: #1976d2;
-    /* Fond devient bleu */
     color: white;
-    /* Le + devient blanc */
     transform: scale(1.1);
-    /* Légère animation */
     border: 2px solid #1976d2;
-    /* Garde la bordure bleue */
 }
 
 
@@ -115,5 +108,4 @@ input {
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
-    /* Espacement entre les tags et le bouton */
 }
