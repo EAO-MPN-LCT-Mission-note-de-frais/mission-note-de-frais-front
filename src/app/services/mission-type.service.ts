@@ -49,6 +49,16 @@ export class MissionTypeService {
   }
 
   /**
+   * Echue un type de mission.
+   * @param id ID du type de mission
+   * @param missionType Données mises à jour
+   * @returns Observable<MissionType>
+   */
+  fadeMissionType(id: number, missionType: MissionType): Observable<MissionType> {
+    return this.http.put<MissionType>(`${this.apiUrl}/fade/${id}`, missionType);
+  }
+
+  /**
    * Supprime un type de mission par son ID.
    * @param id ID du type de mission
    * @returns Observable<void>
