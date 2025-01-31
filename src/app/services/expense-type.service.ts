@@ -19,4 +19,9 @@ export class ExpenseTypeService {
    getAllExpenseTypes(): Observable<ExpenseType[]> {
     return this.http.get<ExpenseType[]>(this.apiUrl);
   }
+
+  createExpenseType(expenseType: { name: string }): Observable<ExpenseType> {
+    return this.http.post<ExpenseType>(this.apiUrl, expenseType);
+  }
+  
 }

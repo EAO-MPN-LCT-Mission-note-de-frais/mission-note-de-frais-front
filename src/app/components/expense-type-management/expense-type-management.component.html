@@ -1,0 +1,10 @@
+<h2>Gestion des natures de frais</h2>
+
+<div class="input-container">
+    <input matInput [(ngModel)]="newExpenseType" placeholder="Ajouter une nature de frais">
+    <button mat-button color="primary" (click)="addExpenseType()">Ajouter</button>
+</div>
+
+<div class="tags-container">
+    <span class="tag" *ngFor="let expense of expenseTypes">{{ expense.name }}</span>
+</div>

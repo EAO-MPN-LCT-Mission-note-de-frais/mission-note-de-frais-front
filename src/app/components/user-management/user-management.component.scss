@@ -1,0 +1,24 @@
+@use '@angular/material' as mat;
+
+// Customize the entire app. Change :host to your selector if you want to scope the styles.
+:host {
+  @include mat.table-overrides((background-color: white,
+      row-item-outline-color: rgba(0, 0, 0, 0.2),
+      header-headline-color: white));
+
+  .mat-mdc-table {
+    .mat-mdc-header-cell {
+      background: #3F51B5 !important;
+    }
+  }
+
+  ::ng-deep {
+    .mat-sort-header-arrow {
+      color: white !important;
+    }
+  }
+}
+
+h2 {
+  margin : 20px;
+}
