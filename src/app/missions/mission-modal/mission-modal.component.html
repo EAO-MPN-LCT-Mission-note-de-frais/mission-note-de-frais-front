@@ -1,0 +1,72 @@
+<div>
+    <h1 mat-dialog-title class="text-center pt-6">{{ data.title }}</h1>
+    <mat-dialog-content>
+        <form [formGroup]="form" (submit)="onSubmit($event)" class="flex flex-col my-6">
+            <div class="flex space-x-4">
+                <mat-form-field class="flex-1" appearance="fill">
+                    <mat-label>Date de début</mat-label>
+                    <input type="date" formControlName="startDate" matInput="startDate"/>
+                    @if (form.get('startDate')?.hasError('required')) {
+                        <mat-error>Date de début est requis</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field class="flex-1" appearance="fill">
+                    <mat-label>Date de fin</mat-label>
+                    <input type="date" formControlName="endDate" matInput="endDate"/>
+                    @if (form.get('endDate')?.hasError('required')) {
+                        <mat-error>Date de fin est requis</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+
+            <div class="flex space-x-4">
+                <mat-form-field class="flex-1" appearance="fill">
+                    <mat-label>Ville de départ</mat-label>
+                    <input formControlName="startTown" matInput="startTown"/>
+                    @if (form.get('startTown')?.hasError('required')) {
+                        <mat-error>Ville de départ est requis</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field class="flex-1" appearance="fill">
+                    <mat-label>Ville d'arrivée</mat-label>
+                    <input formControlName="endTown" matInput="endTown"/>
+                    @if (form.get('endTown')?.hasError('required')) {
+                        <mat-error>Ville d'arrivée est requis</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+            <mat-form-field>
+                <mat-label>Nature de mission</mat-label>
+                <mat-select formControlName="missionTypeId">
+                    @for (type of data.missionTypes; track type.id) {
+                        <mat-option [value]="type.id">{{ type.label }}</mat-option>
+                    }
+                </mat-select>
+                @if (form.get('missionType')?.hasError('required')) {
+                    <mat-error>Nature de mission est requis</mat-error>
+                }
+            </mat-form-field>
+
+            <div class="full-width">
+                <mat-label>Moyens de transport</mat-label>
+                <mat-chip-listbox formControlName="transports" multiple>
+                    @for (transport of data.transports; track transport.id) {
+                        <mat-chip-option selected>{{ transport.name }}</mat-chip-option>
+                    }
+                    @if (submitted() && form.get('transports')?.hasError('required')) {
+                        <mat-error>Sélectionner au moins un moyen de transport</mat-error>
+                    }
+                </mat-chip-listbox>
+            </div>
+
+            <mat-dialog-actions>
+                <div class="flex justify-between w-full">
+                    <button mat-button color="secondary" (click)="close()">Annuler</button>
+                    <button type="submit" mat-button color="primary" (click)="save()">Enregistrer</button>
+                </div>
+            </mat-dialog-actions>
+        </form>
+    </mat-dialog-content>
+</div>
