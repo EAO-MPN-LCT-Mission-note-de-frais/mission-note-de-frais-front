@@ -6,7 +6,7 @@ import {MatIconButton} from '@angular/material/button';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, MatSortHeader} from '@angular/material/sort';
-import {columns} from '@/app/components/missions-table/mission-table-columns';
+import {columns} from '@/app/missions/missions-table/mission-table-columns';
 import {Router} from '@angular/router';
 
 @Component({
