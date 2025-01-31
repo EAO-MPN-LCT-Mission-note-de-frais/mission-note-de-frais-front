@@ -1,6 +1,6 @@
 <section>
-
-    <div class="expense-report-container container max-w-[1500px] mx-auto" *ngIf="mission(); else loading">
+  @if (mission()) {
+    <div class="expense-report-container container max-w-[1500px] mx-auto">
 
       <div class="title-bar">
         <button mat-icon-button (click)="returnHome()" aria-label="Retour à la page d'accueil">
@@ -20,12 +20,11 @@
 
         <div class="table-header">
           <h2>Liste des dépenses</h2>
-          <button
-            *ngIf="mission().expenseReport.status.name === Status.INITIALE || mission().expenseReport.status.name === Status.REJETEE"
-            mat-mini-fab
-            (click)="openCreateModal()">
+          @if (mission().expenseReport.status.name === Status.INITIALE || mission().expenseReport.status.name === Status.REJETEE) {
+            <button mat-mini-fab (click)="openCreateModal()">
               <mat-icon>add</mat-icon>
-          </button>
+            </button>
+          }
         </div>
 
         <app-expense-table
@@ -41,20 +40,28 @@
           </div>
           <div class="actions">
             <button mat-raised-button (click)="export()">Exporter en PDF</button>
-            <button *ngIf="isInitialOrRejected" mat-raised-button (click)="submit()">Soumettre</button>
-            <button *ngIf="isManager && isEnAttente" mat-raised-button (click)="validateSubmission()">Valider</button>
-            <button *ngIf="isManager && isEnAttente" mat-raised-button (click)="rejectSubmission()">Rejeter</button>
-            <button *ngIf="isEnAttente" mat-raised-button (click)="cancelSubmission()">Annuler la soumission</button>
-            <button *ngIf="isInitialOrRejected" mat-raised-button (click)="delete()">Supprimer</button>
+            @if (isInitialOrRejected) {
+              <button mat-raised-button (click)="submit()">Soumettre</button>
+            }
+            @if (isManager && isEnAttente) {
+              <button mat-raised-button (click)="validateSubmission()">Valider</button>
+              <button mat-raised-button (click)="rejectSubmission()">Rejeter</button>
+            }
+            @if (isEnAttente) {
+              <button mat-raised-button (click)="cancelSubmission()">Annuler la soumission</button>
+            }
+            @if (isInitialOrRejected) {
+              <button mat-raised-button (click)="delete()">Supprimer</button>
+            }
           </div>
         </div>
 
       </div>
-
-  </div>
-
-    <ng-template #loading>
+    </div>
+  } @else {
+    <ng-template>
       <p>Chargement...</p>
     </ng-template>
+  }
 
 </section>

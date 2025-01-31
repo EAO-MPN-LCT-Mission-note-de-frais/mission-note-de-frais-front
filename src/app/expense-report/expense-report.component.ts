@@ -53,7 +53,7 @@ export class ExpenseReportComponent implements OnInit {
     startTown: '',
     endTown: '',
     status: this.expenseReportStatus,
-    transportIds: [],
+    transports: [],
     expenseReport: {
       id: 0,
       amount: 0,

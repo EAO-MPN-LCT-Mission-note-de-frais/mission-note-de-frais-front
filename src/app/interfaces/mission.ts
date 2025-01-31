@@ -1,6 +1,7 @@
 import {ExpenseReport} from './expense-report';
 import {MissionStatus} from '@/app/interfaces/mission-status';
 import {MissionType} from '@/app/interfaces/mission-type';
+import {Transport} from '@/app/interfaces/transport';
 
 export interface Mission {
   /**
@@ -36,7 +37,7 @@ export interface Mission {
   /**
    * The transports of the mission
    */
-  transportIds: number[];
+  transports: Transport[];
 
   /**
    * The expense report of the mission

@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, effect, input, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MissionSummary} from '../../interfaces/mission';
 
@@ -10,4 +10,14 @@ import {MissionSummary} from '../../interfaces/mission';
 })
 export class MissionSummaryComponent {
   mission = input<MissionSummary>(undefined as unknown as MissionSummary);
+  transports = signal<string[]>([])
+
+  constructor() {
+    effect(() => {
+      const mission = this.mission();
+      if (mission && mission.transports) {
+        this.transports.set(mission.transports.map(transport => transport.name));
+      }
+    });
+  }
 }

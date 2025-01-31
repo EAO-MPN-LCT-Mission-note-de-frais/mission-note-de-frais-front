@@ -1,6 +1,34 @@
-<div class="mission-summary">
-  <p><strong>Départ :</strong> {{ mission().startTown }} ({{ mission().startDate }})</p>
-  <p><strong>Arrivée :</strong> {{ mission().endTown }} ({{ mission().endDate }})</p>
-  <p><strong>Status :</strong> {{ mission().expenseReport.status.name }}</p>
-  <p><strong>Moyen de transport :</strong> {{ mission().transportIds }}</p>
-</div>
+<section class="mission-summary">
+  <div class="item">
+    <div class="lib">Nature de la mission</div>
+    <div class="value">{{ mission().missionType.label }}</div>
+  </div>
+  <div class="item">
+    <div class="lib">Status</div>
+    <div class="value">{{ mission().expenseReport.status.name }}</div>
+  </div>
+  <div class="item">
+    <div class="lib">Départ</div>
+    <div class="value">{{ mission().startTown }} - {{ mission().startDate | date:'dd/MM/yyyy' }}</div>
+  </div>
+  <div class="item">
+    <div class="lib">Arrivée</div>
+    <div class="value">{{ mission().endTown }} - {{ mission().endDate | date:'dd/MM/yyyy' }}</div>
+  </div>
+  <div class="item">
+    <div class="lib">Moyen de transport</div>
+    <div class="value">{{ transports().join() }}</div>
+  </div>
+  @if (mission().missionType.averageDailyRate) {
+    <div class="item">
+      <div class="lib">Taux journalier moyen</div>
+      <div class="value">{{ mission().missionType.averageDailyRate }} €</div>
+    </div>
+  }
+  @if (mission().missionType.bonusPercentage) {
+    <div class="item">
+      <div class="lib">Pourcentage de prime</div>
+      <div class="value">{{ mission().missionType.bonusPercentage }} %</div>
+    </div>
+  }
+</section>
