@@ -49,7 +49,7 @@ export class MissionTypeService {
   }
 
   /**
-   * Met à jour un type de mission existant.
+   * Echue un type de mission.
    * @param id ID du type de mission
    * @param missionType Données mises à jour
    * @returns Observable<MissionType>
