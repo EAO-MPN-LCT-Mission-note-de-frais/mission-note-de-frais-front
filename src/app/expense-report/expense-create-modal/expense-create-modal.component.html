@@ -11,7 +11,7 @@
         La date est obligatoire.
       </mat-error>
       <mat-error *ngIf="expenseForm.get('date')?.hasError('dateBeforeMissionStart') && !expenseForm.get('date')?.hasError('required')">
-        La date ne peux pas être antérieur au de la mission ({{ missionStartDate | date: 'dd-MM-yyyy' }}).
+        La date ne peux pas être antérieur au début de la mission ({{ data.missionStartDate | date: 'dd-MM-yyyy' }}).
       </mat-error>
     </mat-form-field>
 

@@ -41,6 +41,12 @@ h1 {
   font-size: 2em;
 }
 
+.grayed-out {
+  background-color: #f0f0f0;
+  text-decoration: line-through;
+  color: #888;
+}
+
 :host {
   .title-bar button {
     background-color: #3F51B5 !important;

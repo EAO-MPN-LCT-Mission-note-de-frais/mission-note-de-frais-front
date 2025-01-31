@@ -139,7 +139,10 @@ export class ExpenseReportComponent implements OnInit {
   openCreateModal() {
     const dialogRef = this.dialog.open(ExpenseCreateModalComponent, {
       width: '600px',
-      data: null,
+      data: {
+        missionStartDate: this.mission().startDate,
+        expense: null
+      }
     })
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -160,7 +163,10 @@ export class ExpenseReportComponent implements OnInit {
   openEditModal(expense: Expense) {
     const dialogRef = this.dialog.open(ExpenseCreateModalComponent, {
       width: '600px',
-      data: expense,
+      data: {
+        missionStartDate: this.mission().startDate,
+        expense: expense
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
