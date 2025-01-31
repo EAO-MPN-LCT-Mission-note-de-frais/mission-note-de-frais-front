@@ -6,6 +6,7 @@ import { ExpenseReportComponent } from './expense-report/expense-report.componen
 import { MissionTypeComponent } from './mission-type/mission-type.component';
 import { LoginGuard } from './guards/login.guard';
 import { ConfigurationComponent } from './components/configuration/configuration.component';
+import { AdminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -36,6 +37,6 @@ export const routes: Routes = [
   {
     path: 'configuration',
     component: ConfigurationComponent,
-    canActivate: [AuthGuard] 
+    canActivate: [AuthGuard, AdminGuard] 
   }
 ];
