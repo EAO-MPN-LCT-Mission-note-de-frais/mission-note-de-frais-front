@@ -133,6 +133,7 @@ export class MissionTypeComponent implements OnInit {
       }
     });
   }
+
   openDeleteModal(missionType: MissionType): void {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: '500px',
@@ -149,16 +150,23 @@ export class MissionTypeComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirmed) {
         if (missionType.endDate) {
-          this.missionTypeService.deleteMissionType(missionType.id).subscribe(() => {
-            this.loadMissionTypes();
+          this.missionTypeService.deleteMissionType(missionType.id).subscribe({
+            next: () => this.loadMissionTypes(),
+            error: (err) => {
+              this.errorMessage = err.error?.message || "Des missions sont liés à cette nature de mission.";
+            }
           });
         } else {
           const updatedMissionType = { ...missionType, endDate: new Date().toISOString() };
-          this.missionTypeService.updateMissionType(missionType.id, updatedMissionType).subscribe(() => {
-            this.loadMissionTypes();
+          this.missionTypeService.fadeMissionType(missionType.id, updatedMissionType).subscribe({
+            next: () => this.loadMissionTypes(),
+            error: (err) => {
+              this.errorMessage = err.error?.message || "Erreur lors de l'échéance de la nature de mission'.";
+            }
           });
         }
       }
     });
   }
+
 }
