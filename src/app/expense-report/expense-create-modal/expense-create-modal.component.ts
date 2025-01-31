@@ -29,19 +29,17 @@ export class ExpenseCreateModalComponent {
   private expenseTypeService = inject(ExpenseTypeService);
 
   expenseForm: FormGroup;
-  //TODO implement missionStartDate
-  missionStartDate : Date = new Date('2024-01-01');
   expenseTypeOptions: ExpenseType[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: Expense | null
+    @Inject(MAT_DIALOG_DATA) public data: { missionStartDate: Date, expense: Expense | null }
   ) {
     this.expenseForm = this.fb.group({
-      date: [data?.date || '', [Validators.required, this.notBeforeMissionValidator(this.missionStartDate)]],
-      expenseType: [data?.expenseType || '', [Validators.required]],
-      description: [data?.description || ''],
-      amount: [data?.amount || null, [Validators.required, this.strictlyPositiveValidator]],
-      tax: [data?.tax ?? null, [Validators.min(0)]],
+      date: [data.expense?.date || '', [Validators.required, this.notBeforeMissionValidator(data.missionStartDate)]],
+      expenseType: [data.expense?.expenseType || '', [Validators.required]],
+      description: [data.expense?.description || ''],
+      amount: [data.expense?.amount || null, [Validators.required, this.strictlyPositiveValidator]],
+      tax: [data.expense?.tax ?? null, [Validators.min(0)]],
     });
   }
 
@@ -58,8 +56,8 @@ export class ExpenseCreateModalComponent {
 
   notBeforeMissionValidator(missionStartDate: Date) {
     return (control: AbstractControl): ValidationErrors | null => {
-      const selectedDate = new Date(control.value);
-      if (control.value && selectedDate < missionStartDate) {
+      if (!control.value) return null;
+      if (control.value < missionStartDate) {
         return { dateBeforeMissionStart: true };
       }
       return null;
@@ -79,7 +77,8 @@ export class ExpenseCreateModalComponent {
       if (this.expenseForm.get('tax')?.value === null || this.expenseForm.get('tax')?.value === '') {
         this.expenseForm.get('tax')?.setValue(0);
       }
-      this.dialogRef.close(this.expenseForm.value);
+      const updatedExpense = { ...this.data.expense, ...this.expenseForm.value };
+      this.dialogRef.close(updatedExpense);
     }
   }
 
